@@ -580,6 +580,53 @@
    ]
   },
   {
+   "id": "politicas",
+   "titulo": {
+    "es": "Reglas de tu país",
+    "en": "Rules in your country"
+   },
+   "campos": [
+    {
+     "clave": "acepta_mx",
+     "paises": [
+      "MX"
+     ],
+     "etiqueta": {
+      "es": "Confirmo que mis clientes me escriben o aceptaron que los contacte, y que tengo (o publicaré) mi aviso de privacidad.",
+      "en": "I confirm my customers contact me or agreed to be contacted, and that I have (or will publish) my privacy notice."
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "si",
+       "es": "Sí, confirmo",
+       "en": "Yes, I confirm"
+      }
+     ]
+    },
+    {
+     "clave": "acepta_us",
+     "paises": [
+      "US"
+     ],
+     "etiqueta": {
+      "es": "Confirmo que mis clientes me escriben o aceptaron que los contacte, que tengo (o publicaré) mi política de privacidad y que no usaré este asistente para información de salud de pacientes.",
+      "en": "I confirm my customers contact me or agreed to be contacted, that I have (or will publish) a privacy policy, and that I will not use this assistant for patient health information."
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "si",
+       "es": "Sí, confirmo",
+       "en": "Yes, I confirm"
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "tono",
    "titulo": {
     "es": "Tono",
@@ -685,6 +732,106 @@
    {
     "es": "Salud: en EE. UU. no se puede usar WhatsApp con información de pacientes (HIPAA).",
     "en": "Health: in the US WhatsApp cannot be used with patient information (HIPAA)."
+   }
+  ]
+ },
+ "politicas": {
+  "nota": {
+   "es": "Guía general, no asesoría legal. Si algo no aplica a tu negocio, confirma y sigue.",
+   "en": "General guide, not legal advice. If something does not apply to your business, confirm and move on."
+  },
+  "MX": [
+   {
+    "t": {
+     "es": "Aviso de privacidad",
+     "en": "Privacy notice"
+    },
+    "x": {
+     "es": "La ley mexicana (LFPDPPP) te pide avisar a tus clientes cómo usas sus datos. Ten tu aviso de privacidad publicado.",
+     "en": "Mexican law (LFPDPPP) requires you to tell customers how you use their data. Have your privacy notice published."
+    }
+   },
+   {
+    "t": {
+     "es": "Solo con permiso",
+     "en": "Permission first"
+    },
+    "x": {
+     "es": "Meta exige que la persona te haya escrito o aceptado que la contactes. No agregues números sin su permiso.",
+     "en": "Meta requires that the person wrote to you or agreed to be contacted. Do not add numbers without permission."
+    }
+   },
+   {
+    "t": {
+     "es": "Salud (datos sensibles)",
+     "en": "Health (sensitive data)"
+    },
+    "x": {
+     "es": "Si atiendes pacientes: pide consentimiento expreso y no guardes datos clínicos en el chat.",
+     "en": "If you treat patients: get express consent and keep clinical data out of the chat."
+    }
+   },
+   {
+    "t": {
+     "es": "Derechos de tus clientes",
+     "en": "Your customers' rights"
+    },
+    "x": {
+     "es": "Tus clientes pueden pedir ver, corregir o borrar sus datos (derechos ARCO). Si alguien lo pide, avísanos.",
+     "en": "Your customers can ask to see, fix or delete their data (ARCO rights). If someone asks, tell us."
+    }
+   }
+  ],
+  "US": [
+   {
+    "t": {
+     "es": "Permiso primero (opt-in)",
+     "en": "Permission first (opt-in)"
+    },
+    "x": {
+     "es": "Meta exige que la persona te haya escrito o aceptado que la contactes. No agregues números sin su permiso.",
+     "en": "Meta requires that the person wrote to you or agreed to be contacted. Do not add numbers without permission."
+    }
+   },
+   {
+    "t": {
+     "es": "Política de privacidad",
+     "en": "Privacy policy"
+    },
+    "x": {
+     "es": "Publica una política de privacidad. Si atiendes a residentes de California, las leyes estatales (CCPA/CPRA) pueden aplicar a tu negocio.",
+     "en": "Publish a privacy policy. If you serve California residents, state privacy laws (CCPA/CPRA) may apply to your business."
+    }
+   },
+   {
+    "t": {
+     "es": "Sin información de salud",
+     "en": "No health information"
+    },
+    "x": {
+     "es": "WhatsApp no se puede usar con información de pacientes (HIPAA). Si manejas datos de salud, te proponemos otro canal.",
+     "en": "WhatsApp cannot be used with patient information (HIPAA). If you handle health data, we will suggest another channel."
+    }
+   },
+   {
+    "t": {
+     "es": "Solo respuestas y reservas",
+     "en": "Answers and bookings only"
+    },
+    "x": {
+     "es": "El asistente contesta dudas y recibe solicitudes de reserva. No manda promociones.",
+     "en": "The assistant answers questions and takes booking requests. It does not send promotions."
+    }
+   },
+   {
+    "t": {
+     "es": "Si piden que dejes de escribir",
+     "en": "If someone asks you to stop"
+    },
+    "x": {
+     "es": "Si alguien pide que no le escribas más, avísanos y lo dejamos de contactar.",
+     "en": "If someone asks you to stop messaging them, tell us and we will stop contacting them."
+    }
    }
   ]
  }

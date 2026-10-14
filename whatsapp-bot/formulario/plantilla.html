@@ -33,6 +33,7 @@ body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);padding
 .q{background:var(--paper);border:1px solid var(--line);border-radius:4px 20px 20px 20px;padding:16px 18px;max-width:92%}
 .q h1{font:600 clamp(1.3rem,4.5vw,1.65rem)/1.2 var(--display);margin:0;text-wrap:balance}
 .q p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+#app{display:grid;gap:16px}
 .campos{display:grid;gap:16px}
 .campo{display:grid;gap:6px;min-width:0}
 label,.lbl{font-weight:600;font-size:.95rem}
@@ -76,18 +77,47 @@ button.main{background:var(--accent);color:var(--accent-ink);flex:1}
 button.sec{background:transparent;color:var(--accent)}
 button[hidden]{display:none}
 .ok{color:var(--ok);font-weight:600}
+[hidden]{display:none!important}
+.pantalla{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;justify-content:center;gap:16px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+#intro{align-items:center;cursor:pointer}
+.anim{display:grid;gap:22px;justify-items:center;animation:sale .3s 2.7s forwards}
+.burbuja{display:grid;background:var(--paper);border:1px solid var(--line);border-radius:6px 30px 30px 30px;padding:24px 34px;animation:sube .5s both}
+.burbuja>*{grid-area:1/1;align-self:center;justify-self:center}
+.pts{display:flex;gap:8px;animation:fuera .2s 1.5s forwards}
+.pts i{width:13px;height:13px;border-radius:50%;background:var(--accent);animation:salta 1s infinite}
+.pts i:nth-child(2){animation-delay:.15s}.pts i:nth-child(3){animation-delay:.3s}
+.hola{font:600 clamp(1.5rem,6vw,2rem) var(--display);opacity:0;animation:entra .4s 1.6s forwards}
+.nombre{font:700 1.05rem var(--display);letter-spacing:.02em;color:var(--muted);text-align:center;opacity:0;animation:entra .5s .4s forwards}
+.lang{flex:1 1 0;max-height:46vh;width:100%;max-width:640px;margin-inline:auto;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:28px;padding:20px 26px;cursor:pointer;display:grid;gap:8px;align-content:center;text-align:left}
+.lang small{font:500 clamp(1rem,4vw,1.2rem) var(--body);color:var(--muted)}
+.lang b{font:700 clamp(2.6rem,13vw,4.6rem)/1 var(--display)}
+.lang:hover,.lang:focus-visible{border-color:var(--accent);background:var(--accent-soft)}
+.reglas{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:6px 16px;display:grid}
+.reglas>div{padding:12px 0;border-bottom:1px solid var(--line)}
+.reglas>div:nth-last-child(2){border-bottom:0}
+.reglas b{font:600 1rem var(--display)}
+.reglas p{margin:4px 0 0;color:var(--muted);font-size:.93rem}
+.reglas>p.ayuda{padding:10px 0 12px;margin:0}
+@keyframes sube{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes salta{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-8px);opacity:1}}
+@keyframes fuera{to{opacity:0}}
+@keyframes entra{to{opacity:1}}
+@keyframes sale{to{opacity:0;transform:scale(.97)}}
+@media (prefers-reduced-motion:reduce){.anim,.burbuja,.pts,.pts i,.hola,.nombre{animation:none!important}.pts{display:none}.hola,.nombre{opacity:1}}
 @media (max-width:420px){.paises{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 
-<main class="wrap">
+<main class="wrap" hidden>
   <div class="top"><span class="marca" id="marca"></span><div class="idioma" role="group" aria-label="Idioma / Language"><button type="button" data-l="es" aria-pressed="false">Español</button><button type="button" data-l="en" aria-pressed="false">English</button></div></div>
   <div class="prog" id="prog" aria-hidden="true"></div>
   <p class="paso" id="paso" role="status"></p>
   <div class="q"><h1 id="h1"></h1><p id="sub"></p></div>
   <div id="app"></div>
 </main>
-<div class="barra"><div><button type="button" class="sec" id="atras"></button><button type="button" class="main" id="sigue"></button></div></div>
+<div class="barra" hidden><div><button type="button" class="sec" id="atras"></button><button type="button" class="main" id="sigue"></button></div></div>
+<section class="pantalla" id="intro" aria-label="WhatsApp"><div class="anim"><div class="burbuja"><span class="pts"><i></i><i></i><i></i></span><span class="hola">Hola · Hello</span></div><p class="nombre">WhatsApp · Asistente / Assistant</p></div></section>
+<section class="pantalla" id="idioma" hidden><button type="button" class="lang" data-l="en"><small>What language do you speak?</small><b>English</b></button><button type="button" class="lang" data-l="es"><small>¿Qué idioma hablas?</small><b>Español</b></button></section>
 
 <script>
 const FORM = /*SCHEMA*/null;
@@ -95,7 +125,7 @@ const T = {
   es: { marca: 'Alta de tu asistente de WhatsApp', paso: (n, m) => `Paso ${n} de ${m}`, atras: 'Atrás', sigue: 'Siguiente', revisar: 'Revisar', copiar: 'Copiar datos para enviar', req: 'obligatorio', opt: 'opcional', elige: 'Elige…',
     falta: 'Falta este dato.', tel: 'Solo dígitos, con lada de país. Ejemplos: 529511234567 (México), 15551234567 (EE. UU.).', mail: 'Ese correo no parece válido.', ent: 'Escribe un número entero.', telAyuda: 'Con lada de país, sin + ni espacios.',
     opcionales: 'Más opciones (opcional)',
-    q: { ubicacion: ['¿De dónde es tu negocio?', 'Elige primero el país. Cambia los estados y lo que necesitas preparar.'], negocio: ['Cuéntame de tu negocio', 'Usa el nombre legal igual que en tus documentos.'], whatsapp: ['¿Con qué número atenderá el asistente?', 'Y quién recibe los avisos cuando alguien pide una persona.'], respuestas: ['¿Qué puede contestar el asistente?', 'Solo contesta con lo que escribas aquí. No inventa precios ni horarios.'], revision: ['Todo listo. Revisa y copia.', 'Nada se envía desde esta página. Tú copias el resultado y lo mandas.'] },
+    q: { ubicacion: ['¿De dónde es tu negocio?', 'Elige primero el país. Cambia los estados y lo que necesitas preparar.'], negocio: ['Cuéntame de tu negocio', 'Usa el nombre legal igual que en tus documentos.'], whatsapp: ['¿Con qué número atenderá el asistente?', 'Y quién recibe los avisos cuando alguien pide una persona.'], respuestas: ['¿Qué puede contestar el asistente?', 'Solo contesta con lo que escribas aquí. No inventa precios ni horarios.'], politicas: ['Reglas de tu país', 'Léelas rápido y confirma.'], revision: ['Todo listo. Revisa y copia.', 'Nada se envía desde esta página. Tú copias el resultado y lo mandas.'] },
     paisSub: { MX: '32 estados. Hotel, restaurante, citas y salud (con consentimiento).', US: '50 estados y D.C. Hotel, restaurante y citas. Salud no disponible (HIPAA).' },
     bloqueo: 'En Estados Unidos WhatsApp no se puede usar con información de salud de pacientes (Meta no firma el acuerdo HIPAA). Puedes enviar este formulario igual: te propondremos otra vía, como mensajes de texto con un proveedor que sí lo firme.',
     saludMx: 'En México se permite con consentimiento expreso del paciente y sin guardar datos clínicos en el chat.',
@@ -104,14 +134,14 @@ const T = {
   en: { marca: 'Set up your WhatsApp assistant', paso: (n, m) => `Step ${n} of ${m}`, atras: 'Back', sigue: 'Next', revisar: 'Review', copiar: 'Copy details to send', req: 'required', opt: 'optional', elige: 'Choose…',
     falta: 'This field is required.', tel: 'Digits only, with country code. Examples: 15551234567 (US), 529511234567 (Mexico).', mail: 'That email does not look valid.', ent: 'Enter a whole number.', telAyuda: 'With country code, no + or spaces.',
     opcionales: 'More options (optional)',
-    q: { ubicacion: ['Where is your business?', 'Pick the country first. It changes the states and what you need to prepare.'], negocio: ['Tell me about your business', 'Use the legal name exactly as on your documents.'], whatsapp: ['Which number will the assistant use?', 'And who gets the alerts when someone asks for a person.'], respuestas: ['What can the assistant answer?', 'It only answers with what you write here. It never makes up prices or hours.'], revision: ['All set. Review and copy.', 'Nothing is sent from this page. You copy the result and send it yourself.'] },
+    q: { ubicacion: ['Where is your business?', 'Pick the country first. It changes the states and what you need to prepare.'], negocio: ['Tell me about your business', 'Use the legal name exactly as on your documents.'], whatsapp: ['Which number will the assistant use?', 'And who gets the alerts when someone asks for a person.'], respuestas: ['What can the assistant answer?', 'It only answers with what you write here. It never makes up prices or hours.'], politicas: ['Rules in your country', 'Read them quickly and confirm.'], revision: ['All set. Review and copy.', 'Nothing is sent from this page. You copy the result and send it yourself.'] },
     paisSub: { MX: '32 states. Hotels, restaurants, appointments and health (with consent).', US: '50 states and D.C. Hotels, restaurants and appointments. Health not available (HIPAA).' },
     bloqueo: 'In the United States WhatsApp cannot be used with patient health information (Meta does not sign a HIPAA agreement). You can still send this form: we will propose another channel, such as text messages through a provider that does sign one.',
     saludMx: 'In Mexico it is allowed with the patient\'s express consent and no clinical data stored in the chat.',
     resumen: 'Your details', lista: n => `${n} ready`, ya: 'I have it',
     copiado: 'Copied. Paste it into a message and send it to whoever gave you this form.', manual: 'Select all the text below, copy it and send it to whoever gave you this form.', corrige: 'Check the highlighted fields.' },
 };
-const PASOS = [['ubicacion'], ['negocio'], ['whatsapp'], ['respuestas', 'tono'], []];
+const PASOS = [['ubicacion'], ['negocio'], ['whatsapp'], ['respuestas', 'tono'], ['politicas'], []];
 const LLAVE = 'alta-whatsapp-v3', LLAVE_L = 'alta-whatsapp-idioma';
 const $ = x => document.querySelector(x);
 const esc = x => String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -122,7 +152,7 @@ const u = k => T[L][k];
 const seccion = id => FORM.secciones.find(s => s.id === id);
 const campos = FORM.secciones.flatMap(s => s.campos);
 const val = c => S[c.clave] ?? c.defecto ?? '';
-const visible = c => !c.opcionesPor || !!c.opcionesPor[S.pais];
+const visible = c => (!c.paises || c.paises.includes(S.pais)) && (!c.opcionesPor || !!c.opcionesPor[S.pais]);
 const opcionesDe = c => c.opcionesPor ? (c.opcionesPor[S.pais] || []).map(v => ({ v, es: v, en: v })) : c.clave === 'zona_horaria' && S.pais ? c.opciones.filter(o => o.p === S.pais) : c.opciones;
 const etiquetaOpcion = (c, v) => (opcionesDe(c).find(o => o.v === v) || {})[L] || v;
 const guardar = () => { try { localStorage.setItem(LLAVE, JSON.stringify(S)); } catch {} };
@@ -163,6 +193,7 @@ function listaReqs() {
   const items = [...R.comun, ...R[p]], hechos = (S._ok || []).filter(i => i < items.length).length;
   return `<div class="lista"><h2>${esc(R.titulo[L])}: ${esc(etiquetaOpcion(campos.find(c => c.clave === 'pais'), p))}</h2><span class="cuenta" id="cuenta">${esc(u('lista')(hechos) + ' / ' + items.length)}</span>${items.map((it, i) => `<label><input type="checkbox" data-ok="${i}"${(S._ok || []).includes(i) ? ' checked' : ''}><span>${esc(it[L])}</span></label>`).join('')}<p class="ayuda">${esc(R.nota[L])}</p></div>`;
 }
+const reglas = () => { const P = FORM.politicas; return `<div class="reglas">${(P[S.pais] || []).map(i => `<div><b>${esc(i.t[L])}</b><p>${esc(i.x[L])}</p></div>`).join('')}<p class="ayuda">${esc(P.nota[L])}</p></div>`; };
 function resumen() {
   const filas = ['pais', 'estado', 'ciudad', 'nombre', 'razon_social', 'giro', 'idioma', 'telefono_bot', 'dueno_nombre', 'dueno_telefono'].map(k => campos.find(c => c.clave === k)).filter(c => c && visible(c) && limpio(c) !== '');
   return `<h2 class="paso">${esc(u('resumen'))}</h2><dl class="res">${filas.map(c => `<div><dt>${esc(c.etiqueta[L].replace(/\s*\(.*$/, ''))}</dt><dd>${esc(c.tipo === 'opcion' ? etiquetaOpcion(c, val(c)) : limpio(c))}</dd></div>`).join('')}</dl>`;
@@ -176,7 +207,7 @@ function salida() {
 function pintar() {
   document.documentElement.lang = L;
   document.querySelectorAll('.idioma button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.l === L)));
-  const n = PASOS.length, ultimo = paso === n - 1, clave = ['ubicacion', 'negocio', 'whatsapp', 'respuestas', 'revision'][paso];
+  const n = PASOS.length, ultimo = paso === n - 1, clave = ['ubicacion', 'negocio', 'whatsapp', 'respuestas', 'politicas', 'revision'][paso];
   $('#marca').textContent = u('marca');
   $('#prog').innerHTML = PASOS.map((_, i) => `<i class="${i <= paso ? 'hecho' : ''}"></i>`).join('');
   $('#paso').textContent = u('paso')(paso + 1, n);
@@ -188,6 +219,7 @@ function pintar() {
     const [principal, extra] = PASOS[paso];
     h = `<div class="campos">${camposDe([principal]).map(campoHtml).join('')}</div>`;
     if (extra) h += `<details${tocado && errores([extra]).length ? ' open' : ''}><summary>${esc(u('opcionales'))}</summary><div class="campos">${camposDe([extra]).map(campoHtml).join('')}</div></details>`;
+    if (principal === 'politicas') h = reglas() + h;
     if (principal === 'negocio' || principal === 'ubicacion') h += `<div class="aviso" id="aviso" ${avisoSalud() ? '' : 'hidden'}>${esc(avisoSalud())}</div>`;
     if (principal === 'ubicacion' && S.pais) h += `<details><summary>${esc(FORM.requisitos.titulo[L])}</summary>${listaReqs()}</details>`;
   } else {
@@ -237,6 +269,14 @@ $('#sigue').addEventListener('click', async () => {
   msgCopia = ok ? u('copiado') : u('manual'); pintar();
   const x = $('#envio-x'); if (!ok && x) { x.focus(); x.select(); try { document.execCommand('copy'); } catch {} }
   $('.envio').scrollIntoView({ block: 'nearest' });
+});
+const mostrarIdioma = () => { if ($('#intro').hidden) return; $('#intro').hidden = true; $('#idioma').hidden = false; };
+setTimeout(mostrarIdioma, matchMedia('(prefers-reduced-motion:reduce)').matches ? 800 : 3000);
+$('#intro').addEventListener('click', mostrarIdioma);
+$('#idioma').addEventListener('click', e => {
+  const b = e.target.closest('.lang'); if (!b) return;
+  L = b.dataset.l; try { localStorage.setItem(LLAVE_L, L); } catch {}
+  $('#idioma').hidden = true; $('.wrap').hidden = false; $('.barra').hidden = false; pintar(); window.scrollTo({ top: 0 });
 });
 pintar();
 </script>

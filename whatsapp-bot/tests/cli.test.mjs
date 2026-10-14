@@ -11,10 +11,10 @@ import { buildWorkflow } from '../scripts/build-workflow.mjs';
 
 const run = promisify(execFile);
 const leer = p => JSON.parse(fs.readFileSync(new URL(p, import.meta.url), 'utf8'));
-const completo = { ...leer('../clientes/arcosodi.json'), estado: 'Oaxaca', razon_social: 'Hotel de prueba SA', sitio_web: 'https://ejemplo.mx', telefono_bot: '529510000000', dueno_nombre: 'Lucía', resp_horarios: 'Check-in 3 pm, check-out 12 pm.' };
+const completo = { ...leer('../clientes/arcosodi.json'), estado: 'Oaxaca', acepta_mx: 'si', razon_social: 'Hotel de prueba SA', sitio_web: 'https://ejemplo.mx', telefono_bot: '529510000000', dueno_nombre: 'Lucía', resp_horarios: 'Check-in 3 pm, check-out 12 pm.' };
 
 test('el formulario detecta lo que falta y no inventa', () => {
-  assert.equal(validar({ ...leer('../clientes/arcosodi.json'), estado: 'Oaxaca', razon_social: 'x', sitio_web: 'https://x.mx' }).length, 3);
+  assert.equal(validar({ ...leer('../clientes/arcosodi.json'), estado: 'Oaxaca', acepta_mx: 'si', razon_social: 'x', sitio_web: 'https://x.mx' }).length, 3);
   assert.deepEqual(validar(completo), []);
   assert.match(validar({ ...completo, telefono_bot: '951 123' }).join(), /solo dígitos/);
   assert.match(validar({ ...completo, giro: 'banco' }).join(), /hotel o restaurante/);
@@ -122,9 +122,11 @@ test('formulario: país, idioma y salud', () => {
   assert.match(avisos({ ...completo, pais: 'US' }).join(), /SMS/);
   assert.match(validar({ ...completo, pais: 'ES' }).join(), /País del negocio/);
   assert.match(validar({ ...completo, telefono_bot: '5551234' }).join(), /solo dígitos/);
-  assert.deepEqual(validar({ ...completo, pais: 'US', estado: 'Texas', zona_horaria: 'America/Chicago', telefono_bot: '15551234567', dueno_telefono: '15557654321', idioma: 'en' }), []);
+  assert.deepEqual(validar({ ...completo, pais: 'US', estado: 'Texas', acepta_us: 'si', zona_horaria: 'America/Chicago', telefono_bot: '15551234567', dueno_telefono: '15557654321', idioma: 'en' }), []);
   assert.match(validar({ ...completo, pais: 'US', estado: 'Oaxaca' }).join(), /Estado.*Texas/);   // el estado debe ser del país
   assert.match(validar({ ...completo, estado: undefined }).join(), /Falta: Estado/);
+  assert.match(validar({ ...completo, acepta_mx: undefined }).join(), /Falta: Confirmo/);       // la política de cada país se confirma
+  assert.match(validar({ ...completo, pais: 'US', estado: 'Texas', zona_horaria: 'America/Chicago' }).join(), /Falta: Confirmo/);
   const f = filas({ ...completo, pais: 'US', idioma: 'en', salud: 'no' });
   assert.equal(f.cliente.salud, false); assert.equal(f.cliente.pais, 'US'); assert.ok(f.respuestas.every(r => r.idioma === 'en'));
 });

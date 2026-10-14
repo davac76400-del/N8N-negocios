@@ -20,6 +20,7 @@ export function validar(c) {
   const errores = [];
   for (const sec of FORM.secciones) for (const f of sec.campos) {
     const v = c[f.clave], et = f.etiqueta.es;
+    if (f.paises && !f.paises.includes(c.pais)) continue;                      // política que solo aplica a un país
     if (f.opcionesPor && !f.opcionesPor[c.pais]) continue;                      // estado: solo México y EE. UU.
     const vacio = v === undefined || v === null || String(v).trim() === '' || /^VERIFICAR/i.test(String(v));
     if (f.requerido && vacio) { errores.push(`Falta: ${et} (${f.clave})`); continue; }
