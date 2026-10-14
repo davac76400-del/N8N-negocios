@@ -6,7 +6,7 @@ services:
     runtime: image
     image:
       url: docker.io/atendai/evolution-api:v2.1.1
-    plan: starter # free se duerme y desconecta WhatsApp; starter cuesta ~7 USD/mes
+    plan: free # se duerme tras 15 min sin tráfico; para 24/7 usa starter
     healthCheckPath: /
     envVars:
       - key: SERVER_PORT
