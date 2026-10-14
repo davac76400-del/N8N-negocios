@@ -20,12 +20,14 @@ export function validar(c) {
   const errores = [];
   for (const sec of FORM.secciones) for (const f of sec.campos) {
     const v = c[f.clave], et = f.etiqueta.es;
+    if (f.opcionesPor && !f.opcionesPor[c.pais]) continue;                      // estado: solo México y EE. UU.
     const vacio = v === undefined || v === null || String(v).trim() === '' || /^VERIFICAR/i.test(String(v));
     if (f.requerido && vacio) { errores.push(`Falta: ${et} (${f.clave})`); continue; }
     if (vacio) continue;
     if (f.tipo === 'telefono' && !/^\d{10,15}$/.test(String(v))) errores.push(`${et}: solo dígitos con lada de país, por ejemplo 529511234567 o 15551234567`);
     if (f.tipo === 'correo' && !/^\S+@\S+\.\S+$/.test(v)) errores.push(`${et}: correo no válido`);
-    if (f.tipo === 'opcion' && !f.opciones.some(o => o.v === v)) errores.push(`${et}: debe ser ${f.opciones.map(o => o.v).join(' o ')}`);
+    const ops = f.opcionesPor ? f.opcionesPor[c.pais].map(v => ({ v })) : f.opciones;
+    if (f.tipo === 'opcion' && !ops.some(o => o.v === v)) errores.push(`${et}: debe ser ${ops.map(o => o.v).join(' o ')}`);
     if (f.tipo === 'entero' && !Number.isInteger(Number(v))) errores.push(`${et}: debe ser un número entero`);
   }
   if (c.salud === 'si' && c.pais === 'US') errores.push('BLOQUEADO: un negocio de salud en Estados Unidos no puede usar WhatsApp. Meta no firma el acuerdo de HIPAA (BAA) y su política restringe datos de salud. Ofrece SMS con un proveedor que firme BAA, y consulta a un asesor de HIPAA.');
@@ -44,7 +46,7 @@ const textoOk = v => v && String(v).trim() && !/^VERIFICAR/i.test(String(v));
 export function filas(c, traducidas = []) {
   const id = idCliente(c);
   return {
-    cliente: { id, nombre: c.nombre, giro: c.giro, pais: c.pais, idioma: c.idioma, salud: c.salud === 'si', ciudad: c.ciudad || null, direccion: c.direccion, zona_horaria: c.zona_horaria,
+    cliente: { id, nombre: c.nombre, giro: c.giro, pais: c.pais, idioma: c.idioma, salud: c.salud === 'si', ciudad: c.ciudad || null, estado: c.estado || null, direccion: c.direccion, zona_horaria: c.zona_horaria,
       dueno_nombre: c.dueno_nombre, dueno_telefono: c.dueno_telefono, dueno_correo: c.dueno_correo || null, saludo: c.saludo || null, pausa_min: Number(c.pausa_min) || 30 },
     respuestas: Object.entries(CLAVES).filter(([k]) => textoOk(c[k])).map(([k, clave]) => ({ cliente_id: id, clave, idioma: c.idioma, texto: c[k] })),
     traducidas: traducidas.map(r => ({ cliente_id: id, ...r })),

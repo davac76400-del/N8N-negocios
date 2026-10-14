@@ -10,6 +10,7 @@ create table if not exists clientes (
   idioma text not null default 'es' check (idioma in ('es', 'en')),      -- idioma en el que el negocio escribe sus respuestas
   salud boolean not null default false,                                   -- ¿maneja información de salud de pacientes?
   ciudad text,
+  estado text,
   direccion text,
   zona_horaria text not null default 'America/Mexico_City',
   dueno_nombre text,

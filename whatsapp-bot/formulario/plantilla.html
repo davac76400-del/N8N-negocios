@@ -50,6 +50,8 @@ pre{margin:12px 0 0;font:400 .82rem/1.5 var(--mono);white-space:pre-wrap;overflo
 .idioma button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .bloqueo{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:14px 16px}
 .bloqueo[hidden]{display:none}
+.reqs{background:var(--paper);border:1px solid var(--accent);border-radius:10px;padding:18px}
+.reqs ul{margin:10px 0 8px;padding-left:20px;display:grid;gap:6px}
 </style>
 
 <main class="wrap">
@@ -75,12 +77,12 @@ pre{margin:12px 0 0;font:400 .82rem/1.5 var(--mono);white-space:pre-wrap;overflo
 <script>
 const FORM = /*SCHEMA*/null;
 const UI = {
-  es: { h1: 'Alta de tu asistente de WhatsApp', lead: 'Escribe los datos reales de tu negocio. El asistente solo contesta con lo que pongas aquí: no inventa precios, horarios ni políticas.', priv: 'Nada se envía desde esta página. Tú copias el resultado y lo mandas.', vista: 'Ver lo que se va a enviar', copiar: 'Copiar datos para enviar', req: 'obligatorio', opt: 'opcional', elige: 'Elige…',
+  es: { h1: 'Alta de tu asistente de WhatsApp', lead: 'Escribe los datos reales de tu negocio. El asistente solo contesta con lo que pongas aquí: no inventa precios, horarios ni políticas.', priv: 'Nada se envía desde esta página. Tú copias el resultado y lo mandas.', vista: 'Ver lo que se va a enviar', MX: 'México', US: 'Estados Unidos', copiar: 'Copiar datos para enviar', req: 'obligatorio', opt: 'opcional', elige: 'Elige…',
     falta: 'Falta este dato.', tel: 'Solo dígitos, con lada de país. Ejemplos: 529511234567 (México), 15551234567 (EE. UU.).', mail: 'Ese correo no parece válido.', ent: 'Escribe un número entero.',
     listo: 'Todo listo para enviar', faltan: n => `Faltan ${n} dato${n > 1 ? 's' : ''} obligatorio${n > 1 ? 's' : ''}`, revisa: 'Revisa los datos marcados',
     copiado: 'Copiado. Pégalo en un mensaje y mándalo a quien te pidió este formulario.', manual: 'Selecciona todo el texto de abajo, cópialo y mándalo a quien te pidió este formulario.',
     bloqueo: 'En Estados Unidos WhatsApp no se puede usar con información de salud de pacientes (Meta no firma el acuerdo HIPAA). Puedes enviar este formulario igual: te propondremos otra vía, como mensajes de texto con un proveedor que sí lo firme.', telAyuda: 'Con lada de país, sin + ni espacios.' },
-  en: { h1: 'Set up your WhatsApp assistant', lead: 'Enter your business\'s real information. The assistant only answers with what you write here: it never makes up prices, hours or policies.', priv: 'Nothing is sent from this page. You copy the result and send it yourself.', vista: 'See what will be sent', copiar: 'Copy details to send', req: 'required', opt: 'optional', elige: 'Choose…',
+  en: { h1: 'Set up your WhatsApp assistant', lead: 'Enter your business\'s real information. The assistant only answers with what you write here: it never makes up prices, hours or policies.', priv: 'Nothing is sent from this page. You copy the result and send it yourself.', vista: 'See what will be sent', MX: 'Mexico', US: 'United States', copiar: 'Copy details to send', req: 'required', opt: 'optional', elige: 'Choose…',
     falta: 'This field is required.', tel: 'Digits only, with country code. Examples: 15551234567 (US), 529511234567 (Mexico).', mail: 'That email does not look valid.', ent: 'Enter a whole number.',
     listo: 'Ready to send', faltan: n => `${n} required field${n > 1 ? 's' : ''} missing`, revisa: 'Check the highlighted fields',
     copiado: 'Copied. Paste it into a message and send it to whoever gave you this form.', manual: 'Select all the text below, copy it and send it to whoever gave you this form.',
@@ -95,19 +97,23 @@ const u = k => UI[L][k];
 const campos = FORM.secciones.flatMap(sec => sec.campos);
 const valoresActuales = () => Object.fromEntries(campos.map(c => [c.clave, $('#c-' + c.clave) ? $('#c-' + c.clave).value : (guardado[c.clave] ?? c.defecto ?? '')]));
 let tocado = false;
+const paisAct = () => { const e = $('#c-pais'); return e ? e.value : (guardado.pais || ''); };
+const visible = c => !c.opcionesPor || !!c.opcionesPor[paisAct()];
+const opcionesDe = c => c.opcionesPor ? (c.opcionesPor[paisAct()] || []).map(v => ({ v, es: v, en: v })) : c.clave === 'zona_horaria' && paisAct() ? c.opciones.filter(o => o.p === paisAct()) : c.opciones;
+const reqs = () => { const p = paisAct(), R = FORM.requisitos; if (!R || !R[p]) return ''; const li = a => a.map(i => `<li>${esc(i[L])}</li>`).join(''); return `<div class="reqs"><b>${esc(R.titulo[L])}: ${esc(u(p))}</b><ul>${li(R.comun)}${li(R[p])}</ul><p class="ayuda">${esc(R.nota[L])}</p></div>`; };
 
 function pintar() {
   const v = Object.keys(guardado).length || $('#c-nombre') ? valoresActuales() : null;
   document.documentElement.lang = L;
   $('#h1').textContent = u('h1'); $('#lead').textContent = u('lead'); $('#priv').textContent = u('priv'); $('#vista-t').textContent = u('vista'); $('#copiar').textContent = u('copiar'); $('#envio-x').setAttribute('aria-label', u('copiar'));
   document.querySelectorAll('.idioma button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.l === L)));
-  $('#f').innerHTML = FORM.secciones.map(sec => `
+  $('#f').innerHTML = FORM.secciones.map((sec, i) => (i === 1 ? reqs() : '') + `
     <div class="sec"><fieldset class="${sec.campos.length > 2 && sec.campos.every(c => c.tipo !== 'largo') ? 'dos' : ''}"><legend>${esc(sec.titulo[L])}</legend>
-    ${sec.campos.map(c => {
+    ${sec.campos.filter(visible).map(c => {
       const val = v ? v[c.clave] : (guardado[c.clave] ?? c.defecto ?? '');
       const base = `id="c-${c.clave}" name="${c.clave}" aria-describedby="a-${c.clave} m-${c.clave}"`;
       const ctl = c.tipo === 'largo' ? `<textarea ${base}>${esc(val)}</textarea>`
-        : c.tipo === 'opcion' ? `<select ${base}><option value="">${esc(u('elige'))}</option>${c.opciones.map(o => `<option value="${o.v}"${val === o.v ? ' selected' : ''}>${esc(o[L])}</option>`).join('')}</select>`
+        : c.tipo === 'opcion' ? `<select ${base}><option value="">${esc(u('elige'))}</option>${opcionesDe(c).map(o => `<option value="${o.v}"${val === o.v ? ' selected' : ''}>${esc(o[L])}</option>`).join('')}</select>`
         : `<input ${base} value="${esc(val)}" ${c.tipo === 'telefono' ? 'inputmode="numeric" autocomplete="tel-national"' : c.tipo === 'correo' ? 'type="email" autocomplete="email"' : c.tipo === 'entero' ? 'inputmode="numeric"' : 'type="text"'}>`;
       const ancho = c.tipo === 'largo' || c.clave === 'direccion' || c.clave === 'nombre' ? ' ancho' : '';
       const ayuda = c.ayuda ? c.ayuda[L] : c.tipo === 'telefono' ? u('telAyuda') : '';
@@ -130,7 +136,7 @@ function error(c, x) {
 }
 function revisar() {
   const datos = {}; let faltan = 0, malos = 0;
-  for (const c of campos) {
+  for (const c of campos.filter(c => visible(c) && $('#c-' + c.clave))) {
     const x = valor(c), e = error(c, x);
     if (e) { if (x === '') faltan++; else malos++; }
     if (x !== '') datos[c.clave] = c.tipo === 'entero' && !e ? Number(x) : x;
@@ -147,7 +153,11 @@ function revisar() {
   return { listo, texto: JSON.stringify(out, null, 2) };
 }
 $('#f').addEventListener('input', revisar);
-$('#f').addEventListener('change', revisar);
+$('#f').addEventListener('change', e => {
+  if (e.target.id === 'c-pais') return pintar();
+  if (e.target.id === 'c-estado') { const z = campos.find(c => c.clave === 'estado').tz[paisAct()]?.[e.target.value]; if (z && $('#c-zona_horaria')) $('#c-zona_horaria').value = z; }
+  revisar();
+});
 $('#f').addEventListener('submit', e => e.preventDefault());
 document.querySelector('.idioma').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b || b.dataset.l === L) return;

@@ -1,10 +1,348 @@
 {
- "version": 2,
+ "version": 3,
  "titulo": {
   "es": "Alta de tu asistente de WhatsApp",
   "en": "Set up your WhatsApp assistant"
  },
  "secciones": [
+  {
+   "id": "ubicacion",
+   "titulo": {
+    "es": "Dónde está tu negocio",
+    "en": "Where your business is"
+   },
+   "campos": [
+    {
+     "clave": "pais",
+     "etiqueta": {
+      "es": "País del negocio (elige primero)",
+      "en": "Country (choose first)"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "US",
+       "es": "Estados Unidos",
+       "en": "United States"
+      },
+      {
+       "v": "MX",
+       "es": "México",
+       "en": "Mexico"
+      }
+     ],
+     "ayuda": {
+      "es": "Cambia los estados, los documentos que debes preparar y el formato de fechas (3/4 = 4 de marzo en EE. UU.).",
+      "en": "Changes the states, the documents you must prepare and the date format (3/4 = March 4 in the US)."
+     }
+    },
+    {
+     "clave": "estado",
+     "etiqueta": {
+      "es": "Estado",
+      "en": "State"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opcionesPor": {
+      "MX": [
+       "Aguascalientes",
+       "Baja California",
+       "Baja California Sur",
+       "Campeche",
+       "Chiapas",
+       "Chihuahua",
+       "Ciudad de México",
+       "Coahuila",
+       "Colima",
+       "Durango",
+       "Estado de México",
+       "Guanajuato",
+       "Guerrero",
+       "Hidalgo",
+       "Jalisco",
+       "Michoacán",
+       "Morelos",
+       "Nayarit",
+       "Nuevo León",
+       "Oaxaca",
+       "Puebla",
+       "Querétaro",
+       "Quintana Roo",
+       "San Luis Potosí",
+       "Sinaloa",
+       "Sonora",
+       "Tabasco",
+       "Tamaulipas",
+       "Tlaxcala",
+       "Veracruz",
+       "Yucatán",
+       "Zacatecas"
+      ],
+      "US": [
+       "Alabama",
+       "Alaska",
+       "Arizona",
+       "Arkansas",
+       "California",
+       "Colorado",
+       "Connecticut",
+       "Delaware",
+       "District of Columbia",
+       "Florida",
+       "Georgia",
+       "Hawaii",
+       "Idaho",
+       "Illinois",
+       "Indiana",
+       "Iowa",
+       "Kansas",
+       "Kentucky",
+       "Louisiana",
+       "Maine",
+       "Maryland",
+       "Massachusetts",
+       "Michigan",
+       "Minnesota",
+       "Mississippi",
+       "Missouri",
+       "Montana",
+       "Nebraska",
+       "Nevada",
+       "New Hampshire",
+       "New Jersey",
+       "New Mexico",
+       "New York",
+       "North Carolina",
+       "North Dakota",
+       "Ohio",
+       "Oklahoma",
+       "Oregon",
+       "Pennsylvania",
+       "Rhode Island",
+       "South Carolina",
+       "South Dakota",
+       "Tennessee",
+       "Texas",
+       "Utah",
+       "Vermont",
+       "Virginia",
+       "Washington",
+       "West Virginia",
+       "Wisconsin",
+       "Wyoming"
+      ]
+     },
+     "tz": {
+      "US": {
+       "Alabama": "America/Chicago",
+       "Alaska": "America/Anchorage",
+       "Arizona": "America/Phoenix",
+       "Arkansas": "America/Chicago",
+       "California": "America/Los_Angeles",
+       "Colorado": "America/Denver",
+       "Connecticut": "America/New_York",
+       "Delaware": "America/New_York",
+       "District of Columbia": "America/New_York",
+       "Florida": "America/New_York",
+       "Georgia": "America/New_York",
+       "Hawaii": "Pacific/Honolulu",
+       "Idaho": "America/Denver",
+       "Illinois": "America/Chicago",
+       "Indiana": "America/New_York",
+       "Iowa": "America/Chicago",
+       "Kansas": "America/Chicago",
+       "Kentucky": "America/New_York",
+       "Louisiana": "America/Chicago",
+       "Maine": "America/New_York",
+       "Maryland": "America/New_York",
+       "Massachusetts": "America/New_York",
+       "Michigan": "America/New_York",
+       "Minnesota": "America/Chicago",
+       "Mississippi": "America/Chicago",
+       "Missouri": "America/Chicago",
+       "Montana": "America/Denver",
+       "Nebraska": "America/Chicago",
+       "Nevada": "America/Los_Angeles",
+       "New Hampshire": "America/New_York",
+       "New Jersey": "America/New_York",
+       "New Mexico": "America/Denver",
+       "New York": "America/New_York",
+       "North Carolina": "America/New_York",
+       "North Dakota": "America/Chicago",
+       "Ohio": "America/New_York",
+       "Oklahoma": "America/Chicago",
+       "Oregon": "America/Los_Angeles",
+       "Pennsylvania": "America/New_York",
+       "Rhode Island": "America/New_York",
+       "South Carolina": "America/New_York",
+       "South Dakota": "America/Chicago",
+       "Tennessee": "America/Chicago",
+       "Texas": "America/Chicago",
+       "Utah": "America/Denver",
+       "Vermont": "America/New_York",
+       "Virginia": "America/New_York",
+       "Washington": "America/Los_Angeles",
+       "West Virginia": "America/New_York",
+       "Wisconsin": "America/Chicago",
+       "Wyoming": "America/Denver"
+      },
+      "MX": {
+       "Aguascalientes": "America/Mexico_City",
+       "Baja California": "America/Tijuana",
+       "Baja California Sur": "America/Mazatlan",
+       "Campeche": "America/Mexico_City",
+       "Chiapas": "America/Mexico_City",
+       "Chihuahua": "America/Chihuahua",
+       "Ciudad de México": "America/Mexico_City",
+       "Coahuila": "America/Mexico_City",
+       "Colima": "America/Mexico_City",
+       "Durango": "America/Mexico_City",
+       "Estado de México": "America/Mexico_City",
+       "Guanajuato": "America/Mexico_City",
+       "Guerrero": "America/Mexico_City",
+       "Hidalgo": "America/Mexico_City",
+       "Jalisco": "America/Mexico_City",
+       "Michoacán": "America/Mexico_City",
+       "Morelos": "America/Mexico_City",
+       "Nayarit": "America/Mazatlan",
+       "Nuevo León": "America/Monterrey",
+       "Oaxaca": "America/Mexico_City",
+       "Puebla": "America/Mexico_City",
+       "Querétaro": "America/Mexico_City",
+       "Quintana Roo": "America/Cancun",
+       "San Luis Potosí": "America/Mexico_City",
+       "Sinaloa": "America/Mazatlan",
+       "Sonora": "America/Hermosillo",
+       "Tabasco": "America/Mexico_City",
+       "Tamaulipas": "America/Mexico_City",
+       "Tlaxcala": "America/Mexico_City",
+       "Veracruz": "America/Mexico_City",
+       "Yucatán": "America/Mexico_City",
+       "Zacatecas": "America/Mexico_City"
+      }
+     }
+    },
+    {
+     "clave": "ciudad",
+     "etiqueta": {
+      "es": "Ciudad o municipio",
+      "en": "City"
+     },
+     "tipo": "texto",
+     "requerido": true
+    },
+    {
+     "clave": "direccion",
+     "etiqueta": {
+      "es": "Dirección completa",
+      "en": "Full address"
+     },
+     "tipo": "texto",
+     "requerido": true
+    },
+    {
+     "clave": "zona_horaria",
+     "etiqueta": {
+      "es": "Zona horaria",
+      "en": "Time zone"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "America/New_York",
+       "es": "Eastern (New York, Miami)",
+       "en": "Eastern (New York, Miami)",
+       "p": "US"
+      },
+      {
+       "v": "America/Chicago",
+       "es": "Central (Chicago, Houston)",
+       "en": "Central (Chicago, Houston)",
+       "p": "US"
+      },
+      {
+       "v": "America/Denver",
+       "es": "Mountain (Denver)",
+       "en": "Mountain (Denver)",
+       "p": "US"
+      },
+      {
+       "v": "America/Phoenix",
+       "es": "Arizona (sin cambio de hora)",
+       "en": "Arizona (no daylight saving)",
+       "p": "US"
+      },
+      {
+       "v": "America/Los_Angeles",
+       "es": "Pacific (Los Ángeles)",
+       "en": "Pacific (Los Angeles)",
+       "p": "US"
+      },
+      {
+       "v": "America/Anchorage",
+       "es": "Alaska",
+       "en": "Alaska",
+       "p": "US"
+      },
+      {
+       "v": "Pacific/Honolulu",
+       "es": "Hawái",
+       "en": "Hawaii",
+       "p": "US"
+      },
+      {
+       "v": "America/Mexico_City",
+       "es": "Centro de México (CDMX, Oaxaca)",
+       "en": "Central Mexico (Mexico City, Oaxaca)",
+       "p": "MX"
+      },
+      {
+       "v": "America/Cancun",
+       "es": "Cancún",
+       "en": "Cancun",
+       "p": "MX"
+      },
+      {
+       "v": "America/Monterrey",
+       "es": "Monterrey",
+       "en": "Monterrey",
+       "p": "MX"
+      },
+      {
+       "v": "America/Tijuana",
+       "es": "Tijuana",
+       "en": "Tijuana",
+       "p": "MX"
+      },
+      {
+       "v": "America/Mazatlan",
+       "es": "Pacífico de México (Mazatlán)",
+       "en": "Mexican Pacific (Mazatlan)",
+       "p": "MX"
+      },
+      {
+       "v": "America/Hermosillo",
+       "es": "Sonora (sin cambio de hora)",
+       "en": "Sonora (no daylight saving)",
+       "p": "MX"
+      },
+      {
+       "v": "America/Chihuahua",
+       "es": "Chihuahua",
+       "en": "Chihuahua",
+       "p": "MX"
+      }
+     ],
+     "ayuda": {
+      "es": "Se llena sola al elegir el estado. Corrígela si tu ciudad usa otra.",
+      "en": "Filled in when you pick the state. Change it if your city uses another."
+     }
+    }
+   ]
+  },
   {
    "id": "negocio",
    "titulo": {
@@ -20,6 +358,19 @@
      },
      "tipo": "texto",
      "requerido": true
+    },
+    {
+     "clave": "razon_social",
+     "etiqueta": {
+      "es": "Nombre legal del negocio (igual que en tus documentos)",
+      "en": "Legal business name (exactly as on your documents)"
+     },
+     "tipo": "texto",
+     "requerido": true,
+     "ayuda": {
+      "es": "Meta compara este nombre con tus documentos. Si no coincide, rechaza la verificación.",
+      "en": "Meta compares this name with your documents. If it does not match, verification is rejected."
+     }
     },
     {
      "clave": "giro",
@@ -49,36 +400,6 @@
      "ayuda": {
       "es": "Define qué datos pide el asistente al reservar o agendar.",
       "en": "This sets what the assistant asks for when someone books."
-     }
-    },
-    {
-     "clave": "pais",
-     "etiqueta": {
-      "es": "País del negocio",
-      "en": "Country"
-     },
-     "tipo": "opcion",
-     "requerido": true,
-     "opciones": [
-      {
-       "v": "US",
-       "es": "Estados Unidos",
-       "en": "United States"
-      },
-      {
-       "v": "MX",
-       "es": "México",
-       "en": "Mexico"
-      },
-      {
-       "v": "OTRO",
-       "es": "Otro",
-       "en": "Other"
-      }
-     ],
-     "ayuda": {
-      "es": "Cambia el formato de fechas (3/4 = 4 de marzo en EE. UU.).",
-      "en": "Changes the date format (3/4 = March 4 in the US)."
      }
     },
     {
@@ -132,93 +453,26 @@
      }
     },
     {
-     "clave": "ciudad",
+     "clave": "sitio_web",
      "etiqueta": {
-      "es": "Ciudad",
-      "en": "City"
-     },
-     "tipo": "texto",
-     "requerido": false
-    },
-    {
-     "clave": "direccion",
-     "etiqueta": {
-      "es": "Dirección completa",
-      "en": "Full address"
+      "es": "Sitio web o página de Facebook/Instagram del negocio",
+      "en": "Business website or Facebook/Instagram page"
      },
      "tipo": "texto",
      "requerido": true
     },
     {
-     "clave": "zona_horaria",
+     "clave": "url_privacidad",
      "etiqueta": {
-      "es": "Zona horaria",
-      "en": "Time zone"
+      "es": "Enlace a tu aviso de privacidad",
+      "en": "Link to your privacy policy"
      },
-     "tipo": "opcion",
-     "requerido": true,
-     "opciones": [
-      {
-       "v": "America/New_York",
-       "es": "Eastern (New York, Miami)",
-       "en": "Eastern (New York, Miami)"
-      },
-      {
-       "v": "America/Chicago",
-       "es": "Central (Chicago, Houston)",
-       "en": "Central (Chicago, Houston)"
-      },
-      {
-       "v": "America/Denver",
-       "es": "Mountain (Denver)",
-       "en": "Mountain (Denver)"
-      },
-      {
-       "v": "America/Phoenix",
-       "es": "Arizona (sin cambio de hora)",
-       "en": "Arizona (no daylight saving)"
-      },
-      {
-       "v": "America/Los_Angeles",
-       "es": "Pacific (Los Ángeles)",
-       "en": "Pacific (Los Angeles)"
-      },
-      {
-       "v": "America/Anchorage",
-       "es": "Alaska",
-       "en": "Alaska"
-      },
-      {
-       "v": "Pacific/Honolulu",
-       "es": "Hawái",
-       "en": "Hawaii"
-      },
-      {
-       "v": "America/Mexico_City",
-       "es": "Centro de México (CDMX, Oaxaca)",
-       "en": "Central Mexico (Mexico City, Oaxaca)"
-      },
-      {
-       "v": "America/Cancun",
-       "es": "Cancún",
-       "en": "Cancun"
-      },
-      {
-       "v": "America/Monterrey",
-       "es": "Monterrey",
-       "en": "Monterrey"
-      },
-      {
-       "v": "America/Tijuana",
-       "es": "Tijuana",
-       "en": "Tijuana"
-      },
-      {
-       "v": "America/Mazatlan",
-       "es": "Pacífico de México (Mazatlán)",
-       "en": "Mexican Pacific (Mazatlan)"
-      }
-     ]
+     "tipo": "texto",
+     "requerido": false,
+     "ayuda": {
+      "es": "Si no lo tienes, avísanos. En México se llama aviso de privacidad; en EE. UU., privacy policy.",
+      "en": "If you do not have one, tell us. In the US it is called a privacy policy."
+     }
     }
    ]
   },
@@ -353,5 +607,85 @@
     }
    ]
   }
- ]
+ ],
+ "requisitos": {
+  "titulo": {
+   "es": "Lo que necesitas preparar",
+   "en": "What you need to prepare"
+  },
+  "nota": {
+   "es": "Es una guía. Meta puede pedir otros documentos. No es asesoría legal.",
+   "en": "This is a guide. Meta may ask for other documents. Not legal advice."
+  },
+  "comun": [
+   {
+    "es": "Cuenta de Meta Business (business.facebook.com) donde seas administrador.",
+    "en": "A Meta Business account (business.facebook.com) where you are an admin."
+   },
+   {
+    "es": "Verificación del negocio en Meta. Puede tardar días: empieza primero.",
+    "en": "Business verification with Meta. It can take days: start first."
+   },
+   {
+    "es": "Un número solo para el asistente. No puede estar activo en la app normal de WhatsApp y debe recibir un código por SMS o llamada.",
+    "en": "A number just for the assistant. It cannot be active in the regular WhatsApp app and must receive a code by SMS or call."
+   },
+   {
+    "es": "Método de pago en Meta (tarjeta).",
+    "en": "A payment method in Meta (card)."
+   },
+   {
+    "es": "Acceso para configurarlo: agrega como administrador a quien te lo pida, o crea un usuario del sistema. Nunca mandes contraseñas ni tokens por chat.",
+    "en": "Access to set it up: add whoever asked you as an admin, or create a system user. Never send passwords or tokens in chat."
+   },
+   {
+    "es": "Logo del negocio (imagen cuadrada).",
+    "en": "Your business logo (square image)."
+   }
+  ],
+  "MX": [
+   {
+    "es": "Constancia de situación fiscal del SAT (RFC) o, si es persona moral, acta constitutiva.",
+    "en": "SAT tax status certificate (RFC) or, for a company, articles of incorporation."
+   },
+   {
+    "es": "Comprobante de domicilio reciente (luz, agua o teléfono) con el nombre y dirección del negocio.",
+    "en": "Recent proof of address (utility or phone bill) with the business name and address."
+   },
+   {
+    "es": "Aviso de privacidad publicado (ley LFPDPPP).",
+    "en": "A published privacy notice (LFPDPPP law)."
+   },
+   {
+    "es": "Si manejas datos de salud: consentimiento expreso del paciente y no guardar datos clínicos en el chat.",
+    "en": "If you handle health data: express patient consent, and no clinical data in the chat."
+   }
+  ],
+  "US": [
+   {
+    "es": "Carta del IRS con tu EIN (CP 575 o 147C), o los artículos de constitución (LLC/Corp).",
+    "en": "IRS letter with your EIN (CP 575 or 147C), or your articles of organization/incorporation."
+   },
+   {
+    "es": "Licencia de negocio estatal o local.",
+    "en": "State or local business license."
+   },
+   {
+    "es": "Recibo de servicios o estado de cuenta bancario con el nombre legal y la dirección del negocio.",
+    "en": "Utility bill or bank statement showing the legal name and business address."
+   },
+   {
+    "es": "Política de privacidad (privacy policy) en tu sitio.",
+    "en": "A privacy policy on your website."
+   },
+   {
+    "es": "Solo escribimos a quien te escribió primero o aceptó que lo contactes (opt-in).",
+    "en": "We only message people who wrote to you first or agreed to be contacted (opt-in)."
+   },
+   {
+    "es": "Salud: en EE. UU. no se puede usar WhatsApp con información de pacientes (HIPAA).",
+    "en": "Health: in the US WhatsApp cannot be used with patient information (HIPAA)."
+   }
+  ]
+ }
 }
