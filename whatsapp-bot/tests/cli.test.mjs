@@ -131,6 +131,14 @@ test('formulario: país, idioma y salud', () => {
   assert.equal(f.cliente.salud, false); assert.equal(f.cliente.pais, 'US'); assert.ok(f.respuestas.every(r => r.idioma === 'en'));
 });
 
+test('clínica: es negocio de salud y el bot la trata como citas', () => {
+  assert.match(validar({ ...completo, giro: 'clinica', pais: 'US', estado: 'Texas', acepta_us: 'si' }).join(), /BLOQUEADO/);
+  assert.deepEqual(validar({ ...completo, giro: 'clinica', salud: undefined }), []);                 // México: se permite…
+  assert.match(avisos({ ...completo, giro: 'clinica', salud: undefined }).join(), /consentimiento/);  // …con aviso
+  const f = filas({ ...completo, giro: 'clinica', salud: undefined }).cliente;
+  assert.equal(f.giro, 'citas'); assert.equal(f.salud, true);
+});
+
 test('traducción de respuestas: acepta lo fiel y descarta precios u enlaces cambiados', async () => {
   const srv = http.createServer((req, res) => {
     let b = ''; req.on('data', d => b += d); req.on('end', () => {

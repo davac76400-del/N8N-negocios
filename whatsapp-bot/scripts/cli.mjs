@@ -16,7 +16,9 @@ const env = k => process.env[k] || '';
 const faltan = ks => ks.filter(k => !env(k));
 
 /* ---------- cliente ---------- */
+const norm = c => c.giro === 'clinica' ? { ...c, salud: 'si' } : c;   // una clínica siempre es negocio de salud
 export function validar(c) {
+  c = norm(c);
   const errores = [];
   for (const sec of FORM.secciones) for (const f of sec.campos) {
     const v = c[f.clave], et = f.etiqueta.es;
@@ -35,6 +37,7 @@ export function validar(c) {
   return errores;
 }
 export function avisos(c) {
+  c = norm(c);
   const a = [];
   if (c.salud === 'si' && c.pais !== 'US') a.push('Negocio de salud fuera de EE. UU.: pide consentimiento expreso para tratar datos de salud (en México, LFPDPPP), no guardes datos clínicos y revisa la política de Meta de tu país. El asistente avisa que no se comparta información médica.');
   if (c.pais === 'US') a.push('EE. UU.: WhatsApp es menos usado que SMS. Confirma que los clientes finales del negocio usan WhatsApp antes de venderlo.');
@@ -45,9 +48,10 @@ const CLAVES = { resp_tarifas: 'tarifas', resp_horarios: 'horarios', resp_ubicac
 const textoOk = v => v && String(v).trim() && !/^VERIFICAR/i.test(String(v));
 
 export function filas(c, traducidas = []) {
+  c = norm(c);
   const id = idCliente(c);
   return {
-    cliente: { id, nombre: c.nombre, giro: c.giro, pais: c.pais, idioma: c.idioma, salud: c.salud === 'si', ciudad: c.ciudad || null, estado: c.estado || null, direccion: c.direccion, zona_horaria: c.zona_horaria,
+    cliente: { id, nombre: c.nombre, giro: c.giro === 'clinica' ? 'citas' : c.giro, pais: c.pais, idioma: c.idioma, salud: c.salud === 'si', ciudad: c.ciudad || null, estado: c.estado || null, direccion: c.direccion, zona_horaria: c.zona_horaria,
       dueno_nombre: c.dueno_nombre, dueno_telefono: c.dueno_telefono, dueno_correo: c.dueno_correo || null, saludo: c.saludo || null, pausa_min: Number(c.pausa_min) || 30 },
     respuestas: Object.entries(CLAVES).filter(([k]) => textoOk(c[k])).map(([k, clave]) => ({ cliente_id: id, clave, idioma: c.idioma, texto: c[k] })),
     traducidas: traducidas.map(r => ({ cliente_id: id, ...r })),

@@ -395,11 +395,16 @@
        "v": "citas",
        "es": "Negocio de citas (salón, barbería, taller, spa…)",
        "en": "Appointment business (salon, barbershop, auto shop, spa…)"
+      },
+      {
+       "v": "clinica",
+       "es": "Clínica, consultorio o dentista",
+       "en": "Clinic, medical office or dentist"
       }
      ],
      "ayuda": {
-      "es": "Define qué datos pide el asistente al reservar o agendar.",
-      "en": "This sets what the assistant asks for when someone books."
+      "es": "Define qué datos pide el asistente al reservar. Las clínicas agendan citas y se tratan como negocio de salud.",
+      "en": "This sets what the assistant asks for when someone books. Clinics book appointments and are treated as a health business."
      }
     },
     {
@@ -450,6 +455,9 @@
      "ayuda": {
       "es": "En Estados Unidos WhatsApp no se puede usar para información de salud. Si contestas Sí te proponemos otra vía.",
       "en": "In the United States WhatsApp cannot be used for health information. If you answer Yes we will suggest another channel."
+     },
+     "ocultoSi": {
+      "giro": "clinica"
      }
     },
     {

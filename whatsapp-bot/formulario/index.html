@@ -7,160 +7,192 @@
 <title>Alta de Asistente WhatsApp</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-/* Concepto: una conversación. Cada paso es una pregunta del asistente (burbuja blanca) y lo que eliges se vuelve tu respuesta (burbuja de color). */
+/* Concepto: una conversación sobre papel crema. El asistente pregunta en burbuja verde jade; tus respuestas se vuelven burbujas de cempasúchil (amarillo). */
 :root{
-  --bg:#eef3f5; --paper:#ffffff; --ink:#0e1b22; --muted:#506068; --line:#d5dfe3;
-  --accent:#087a62; --accent-ink:#ffffff; --accent-soft:#dff3ec;
-  --warn:#8a4b00; --warn-bg:#fff1dc; --ok:#116b45; --ok-bg:#e0f4ea; --focus:#087a62;
-  --display:"Outfit",ui-sans-serif,system-ui,sans-serif; --body:"Figtree",ui-sans-serif,system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --bg:#f6edda; --bg2:#efe2c6; --paper:#fffaf0; --ink:#1e2723; --muted:#6a6352; --line:#e3d7bb;
+  --jade:#0e5a4a; --jade-ink:#fbf3e0; --gold:#f2b53d; --gold-ink:#2b1e00; --gold-soft:#fbe8b8;
+  --accent:#0e5a4a; --accent-ink:#fbf3e0; --focus:#0e5a4a;
+  --q-bg:#0e5a4a; --q-ink:#fbf3e0; --q-mute:#bfe0d3;
+  --warn:#9a3d12; --warn-bg:#fde7d0; --ok:#17603f; --ok-bg:#dcefd9; --shadow:rgba(60,40,0,.22);
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif; --body:"Figtree",ui-sans-serif,system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0b1418; --paper:#14232a; --ink:#e7f0f3; --muted:#9db1b9; --line:#27393f;
-  --accent:#3fd1a8; --accent-ink:#04211a; --accent-soft:#12372f;
-  --warn:#ffc277; --warn-bg:#3a2a12; --ok:#6fe0a8; --ok-bg:#12301f; --focus:#3fd1a8; color-scheme:dark}}
+  --bg:#111812; --bg2:#17211a; --paper:#1b2720; --ink:#f4ead6; --muted:#aaa28c; --line:#2d3b32;
+  --jade:#58d1ac; --jade-ink:#06241b; --gold:#f2b53d; --gold-ink:#2b1e00; --gold-soft:#3a3016;
+  --accent:#58d1ac; --accent-ink:#06241b; --focus:#58d1ac;
+  --q-bg:#134a3c; --q-ink:#f4ead6; --q-mute:#a5d3c3;
+  --warn:#ffb98a; --warn-bg:#3b2414; --ok:#8fe0b0; --ok-bg:#16301f; --shadow:rgba(0,0,0,.5); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0b1418; --paper:#14232a; --ink:#e7f0f3; --muted:#9db1b9; --line:#27393f;
-  --accent:#3fd1a8; --accent-ink:#04211a; --accent-soft:#12372f;
-  --warn:#ffc277; --warn-bg:#3a2a12; --ok:#6fe0a8; --ok-bg:#12301f; --focus:#3fd1a8; color-scheme:dark}
+  --bg:#111812; --bg2:#17211a; --paper:#1b2720; --ink:#f4ead6; --muted:#aaa28c; --line:#2d3b32;
+  --jade:#58d1ac; --jade-ink:#06241b; --gold:#f2b53d; --gold-ink:#2b1e00; --gold-soft:#3a3016;
+  --accent:#58d1ac; --accent-ink:#06241b; --focus:#58d1ac;
+  --q-bg:#134a3c; --q-ink:#f4ead6; --q-mute:#a5d3c3;
+  --warn:#ffb98a; --warn-bg:#3b2414; --ok:#8fe0b0; --ok-bg:#16301f; --shadow:rgba(0,0,0,.5); color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);padding-inline:16px;padding-block:20px 120px}
+[hidden]{display:none!important}
+body{background-color:var(--bg);background-image:radial-gradient(60rem 40rem at 105% -10%,color-mix(in srgb,var(--gold) 28%,transparent),transparent 60%),radial-gradient(50rem 36rem at -15% 110%,color-mix(in srgb,var(--jade) 16%,transparent),transparent 60%);background-attachment:fixed;color:var(--ink);font:400 16px/1.5 var(--body);padding-inline:16px;padding-block:20px 130px}
 .wrap{max-width:640px;margin-inline:auto;display:grid;gap:18px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.marca{font:700 1rem var(--display);letter-spacing:.01em}
-.idioma{display:flex;gap:6px}
-.idioma button{font:600 .85rem var(--body);background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
-.idioma button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.prog{display:grid;grid-auto-flow:column;gap:6px}
-.prog i{height:6px;border-radius:3px;background:var(--line)}
-.prog i.hecho{background:var(--accent)}
-.paso{font-size:.85rem;color:var(--muted);margin:0}
-.q{background:var(--paper);border:1px solid var(--line);border-radius:4px 20px 20px 20px;padding:16px 18px;max-width:92%}
-.q h1{font:600 clamp(1.3rem,4.5vw,1.65rem)/1.2 var(--display);margin:0;text-wrap:balance}
-.q p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+.marca{font:400 1.6rem/1 var(--serif);letter-spacing:.005em}
+.marca em{color:var(--jade)}
+.idioma{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:3px}
+.idioma button{font:600 .82rem var(--body);background:transparent;color:var(--muted);border:0;border-radius:999px;padding:6px 14px;cursor:pointer;transition:background .2s,color .2s}
+.idioma button[aria-pressed="true"]{background:var(--jade);color:var(--jade-ink)}
+.prog{height:8px;border-radius:999px;background:color-mix(in srgb,var(--ink) 10%,transparent);overflow:hidden}
+.prog i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--jade),var(--gold));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.paso{font:500 .85rem var(--body);color:var(--muted);margin:0;letter-spacing:.02em}
+.q{background:var(--q-bg);color:var(--q-ink);border-radius:6px 26px 26px 26px;padding:20px 24px;max-width:94%;box-shadow:0 14px 30px -18px var(--shadow)}
+.q h1{font:400 clamp(1.8rem,6vw,2.35rem)/1.08 var(--serif);margin:0;text-wrap:balance}
+.q p{margin:8px 0 0;color:var(--q-mute);font-size:.97rem}
 #app{display:grid;gap:16px}
-.campos{display:grid;gap:16px}
-.campo{display:grid;gap:6px;min-width:0}
-label,.lbl{font-weight:600;font-size:.95rem}
-.req{font-weight:500;font-size:.78rem;color:var(--muted);margin-left:6px}
-.ayuda{font-size:.85rem;color:var(--muted);margin:0}
-.msg{font-size:.85rem;color:var(--warn);margin:0}
-input,textarea,select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;min-width:0}
-textarea{min-height:92px;resize:vertical}
-input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.campo.err input,.campo.err textarea,.campo.err select,.campo.err .opts{border-color:var(--warn)}
-.opts{display:flex;flex-wrap:wrap;gap:8px;border:1px solid transparent;border-radius:14px}
-.opt{font:500 .95rem var(--body);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:18px 18px 18px 4px;padding:10px 16px;cursor:pointer;text-align:left}
-.opt:hover{border-color:var(--accent)}
-.opt[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);border-radius:18px 18px 4px 18px}
-.paises{display:grid;gap:10px;grid-template-columns:1fr 1fr}
-.pais{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;text-align:left;display:grid;gap:6px;align-content:start}
-.pais b{font:600 1.2rem var(--display)}
-.pais span{font-size:.85rem;color:var(--muted)}
-.pais:hover{border-color:var(--accent)}
-.pais[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.aviso{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:14px;padding:12px 14px;font-size:.92rem}
-.aviso[hidden]{display:none}
-details{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.campos{display:grid;gap:18px}
+.campo{display:grid;gap:7px;min-width:0}
+label,.lbl{font-weight:600;font-size:.96rem}
+.req{font-weight:500;font-size:.76rem;color:var(--muted);margin-left:8px;letter-spacing:.03em;text-transform:uppercase}
+.ayuda{font-size:.86rem;color:var(--muted);margin:0}
+.msg{font-size:.86rem;color:var(--warn);margin:0;font-weight:500}
+input,textarea,select{font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;width:100%;min-width:0;transition:border-color .2s,box-shadow .2s}
+input:hover,textarea:hover,select:hover{border-color:color-mix(in srgb,var(--jade) 45%,var(--line))}
+textarea{min-height:96px;resize:vertical}
+input:focus-visible,textarea:focus-visible,select:focus-visible{outline:none;border-color:var(--jade);box-shadow:0 0 0 4px color-mix(in srgb,var(--jade) 22%,transparent)}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.campo.err input,.campo.err textarea,.campo.err select{border-color:var(--warn)}
+.campo.err .opts{outline:2px solid var(--warn);outline-offset:4px;border-radius:16px}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opt{font:600 .96rem var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:20px 20px 20px 5px;padding:11px 18px;cursor:pointer;text-align:left;transition:transform .15s,background .2s,border-color .2s,border-radius .25s}
+.opt:hover{border-color:var(--jade);transform:translateY(-1px)}
+.opt:active{transform:scale(.97)}
+.opt[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink);border-color:var(--gold);border-radius:20px 20px 5px 20px;box-shadow:0 8px 18px -10px var(--shadow)}
+.paises{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.pais{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px;cursor:pointer;text-align:left;display:grid;gap:8px;align-content:start;position:relative;transition:transform .2s,border-color .2s,background .2s,box-shadow .2s}
+.pais i{font:500 .78rem var(--mono);font-style:normal;letter-spacing:.08em;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--muted);border-radius:999px;padding:3px 10px;justify-self:start}
+.pais b{font:400 1.7rem/1.05 var(--serif)}
+.pais span{font-size:.86rem;color:var(--muted)}
+.pais:hover{transform:translateY(-3px);border-color:var(--jade);box-shadow:0 16px 30px -20px var(--shadow)}
+.pais[aria-pressed="true"]{border-color:var(--jade);background:var(--gold-soft)}
+.pais[aria-pressed="true"]::after{content:"";position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;background:var(--jade) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbf3e0' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7'/%3E%3C/svg%3E") center/14px no-repeat;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.aviso{background:var(--warn-bg);color:var(--warn);border-radius:16px;padding:14px 16px;font-size:.93rem;font-weight:500;border-left:5px solid var(--warn)}
+details{background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:14px 18px}
 summary{cursor:pointer;font-weight:600}
+details[open] summary{margin-bottom:4px}
 details .campos{margin-top:14px}
-.res{display:grid;gap:0;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:4px 16px}
-.res div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.res{display:grid;background:var(--paper);border:1.5px solid var(--line);border-radius:18px;padding:4px 18px;margin:0}
+.res div{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px dashed var(--line)}
 .res div:last-child{border-bottom:0}
 .res dt{color:var(--muted);font-size:.9rem;margin:0;flex:0 1 45%}
 .res dd{margin:0;font-weight:600;text-align:right;min-width:0;overflow-wrap:break-word;flex:1 1 auto}
-.lista{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:10px}
-.lista h2{font:600 1.1rem var(--display);margin:0}
-.lista label{display:grid;grid-template-columns:22px 1fr;gap:10px;font-weight:400;font-size:.95rem;align-items:start;cursor:pointer}
-.lista input{width:20px;height:20px;padding:0;margin:2px 0 0;accent-color:var(--accent)}
-.cuenta{font-size:.85rem;color:var(--ok);background:var(--ok-bg);border-radius:999px;padding:3px 10px;justify-self:start;font-weight:600}
-.envio textarea{font:400 .8rem/1.5 var(--mono);min-height:160px}
-.barra{position:fixed;inset-inline:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
-.barra div{max-width:640px;margin-inline:auto;display:flex;gap:10px;justify-content:space-between}
-button.main,button.sec{font:600 1rem var(--body);border-radius:12px;padding:13px 22px;cursor:pointer;border:1px solid var(--accent)}
-button.main{background:var(--accent);color:var(--accent-ink);flex:1}
-button.sec{background:transparent;color:var(--accent)}
-button[hidden]{display:none}
-.ok{color:var(--ok);font-weight:600}
-[hidden]{display:none!important}
-.pantalla{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;justify-content:center;gap:16px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
-#intro{align-items:center;cursor:pointer}
-.anim{display:grid;gap:22px;justify-items:center;animation:sale .3s 2.7s forwards}
-.burbuja{display:grid;background:var(--paper);border:1px solid var(--line);border-radius:6px 30px 30px 30px;padding:24px 34px;animation:sube .5s both}
-.burbuja>*{grid-area:1/1;align-self:center;justify-self:center}
-.pts{display:flex;gap:8px;animation:fuera .2s 1.5s forwards}
-.pts i{width:13px;height:13px;border-radius:50%;background:var(--accent);animation:salta 1s infinite}
-.pts i:nth-child(2){animation-delay:.15s}.pts i:nth-child(3){animation-delay:.3s}
-.hola{font:600 clamp(1.5rem,6vw,2rem) var(--display);opacity:0;animation:entra .4s 1.6s forwards}
-.nombre{font:700 1.05rem var(--display);letter-spacing:.02em;color:var(--muted);text-align:center;opacity:0;animation:entra .5s .4s forwards}
-.lang{flex:1 1 0;max-height:46vh;width:100%;max-width:640px;margin-inline:auto;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:28px;padding:20px 26px;cursor:pointer;display:grid;gap:8px;align-content:center;text-align:left}
-.lang small{font:500 clamp(1rem,4vw,1.2rem) var(--body);color:var(--muted)}
-.lang b{font:700 clamp(2.6rem,13vw,4.6rem)/1 var(--display)}
-.lang:hover,.lang:focus-visible{border-color:var(--accent);background:var(--accent-soft)}
-.reglas{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:6px 16px;display:grid}
-.reglas>div{padding:12px 0;border-bottom:1px solid var(--line)}
-.reglas>div:nth-last-child(2){border-bottom:0}
-.reglas b{font:600 1rem var(--display)}
+.lista,.reglas{background:var(--paper);border:1.5px solid var(--line);border-radius:20px;padding:18px;display:grid;gap:12px}
+.lista h2{font:400 1.45rem/1.1 var(--serif);margin:0}
+.lista label{display:grid;grid-template-columns:24px 1fr;gap:12px;font-weight:400;font-size:.95rem;align-items:start;cursor:pointer}
+.lista input{appearance:none;width:24px;height:24px;padding:0;margin:0;border-radius:8px;border:2px solid var(--line);background:var(--bg);display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s}
+.lista input:checked{background:var(--jade) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbf3e0' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7'/%3E%3C/svg%3E") center/15px no-repeat;border-color:var(--jade);animation:pop .3s cubic-bezier(.3,1.6,.5,1)}
+.lista input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.cuenta{font:500 .8rem var(--mono);color:var(--jade);background:color-mix(in srgb,var(--jade) 14%,transparent);border-radius:999px;padding:4px 12px;justify-self:start}
+.reglas{gap:0;padding:6px 18px}
+.reglas>div{padding:14px 0 14px 22px;border-bottom:1px dashed var(--line);position:relative}
+.reglas>div::before{content:"";position:absolute;left:0;top:21px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.reglas b{font:400 1.25rem/1.1 var(--serif)}
 .reglas p{margin:4px 0 0;color:var(--muted);font-size:.93rem}
-.reglas>p.ayuda{padding:10px 0 12px;margin:0}
-@keyframes sube{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
-@keyframes salta{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-8px);opacity:1}}
+.reglas>p.ayuda{padding:12px 0 10px;margin:0}
+.envio{display:grid;gap:12px}
+.hecho{display:flex;align-items:center;gap:12px;background:var(--ok-bg);color:var(--ok);border-radius:16px;padding:14px 16px;font-weight:600}
+.hecho svg{flex:none;width:30px;height:30px}
+.hecho path{stroke-dasharray:30;stroke-dashoffset:30;animation:trazo .5s .15s forwards}
+.envio textarea{font:500 .8rem/1.55 var(--mono);min-height:170px}
+.barra{position:fixed;inset-inline:0;bottom:0;padding:26px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 55%,transparent);pointer-events:none}
+.barra div{max-width:640px;margin-inline:auto;display:flex;gap:10px;pointer-events:auto}
+button.main,button.sec{font:700 1rem var(--body);border-radius:999px;padding:15px 26px;cursor:pointer;border:2px solid var(--jade);transition:transform .15s,box-shadow .2s,background .2s}
+button.main{background:var(--accent);color:var(--accent-ink);flex:1;box-shadow:0 14px 26px -14px var(--shadow)}
+button.sec{background:var(--paper);color:var(--jade)}
+button.main:hover,button.sec:hover{transform:translateY(-2px)}
+button.main:active,button.sec:active{transform:scale(.98)}
+.pantalla{position:fixed;inset:0;z-index:20;background-color:var(--bg);background-image:radial-gradient(60rem 40rem at 105% -10%,color-mix(in srgb,var(--gold) 34%,transparent),transparent 60%),radial-gradient(50rem 36rem at -15% 110%,color-mix(in srgb,var(--jade) 20%,transparent),transparent 60%);display:flex;flex-direction:column;justify-content:center;gap:16px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+#intro{align-items:center;cursor:pointer}
+.anim{display:grid;gap:12px;justify-items:start;animation:sale .3s 2.7s forwards}
+.b1,.b2{border-radius:6px 30px 30px 30px;padding:20px 34px;font:400 clamp(2.4rem,11vw,3.6rem)/1 var(--serif)}
+.b1{display:grid;background:var(--paper);border:1.5px solid var(--line);animation:sube .5s .1s both,tinte .3s 1.3s forwards}
+.b1>*{grid-area:1/1;align-self:center;justify-self:center}
+.pts{display:flex;gap:9px;animation:fuera .2s 1.2s forwards}
+.pts i{width:14px;height:14px;border-radius:50%;background:var(--jade);animation:salta 1s infinite}
+.pts i:nth-child(2){animation-delay:.15s}.pts i:nth-child(3){animation-delay:.3s}
+.hola{opacity:0;animation:entra .3s 1.4s forwards}
+.b2{background:var(--gold);color:var(--gold-ink);border-radius:30px 30px 6px 30px;justify-self:end;opacity:0;animation:sube .5s 1.8s forwards}
+.nombre{font:400 1.25rem/1.2 var(--serif);font-style:italic;color:var(--muted);margin:10px 0 0;opacity:0;animation:entra .5s 2.3s forwards}
+.lang{flex:1 1 0;max-height:46vh;width:100%;max-width:640px;margin-inline:auto;font:inherit;border:0;border-radius:34px 34px 34px 8px;padding:22px 28px;cursor:pointer;display:grid;gap:8px;align-content:center;text-align:left;position:relative;overflow:hidden;box-shadow:0 24px 40px -26px var(--shadow);animation:sube .6s both;transition:transform .25s,box-shadow .25s}
+.lang[data-l=en]{background:var(--jade);color:var(--jade-ink);animation-delay:.05s}
+.lang[data-l=es]{background:var(--gold);color:var(--gold-ink);border-radius:34px 34px 8px 34px;animation-delay:.2s}
+.lang small{font:500 clamp(1rem,4vw,1.2rem) var(--body);opacity:.8}
+.lang b{font:400 clamp(3.2rem,16vw,5.6rem)/.95 var(--serif)}
+.lang::after{content:"→";position:absolute;right:26px;bottom:20px;font:600 1.8rem var(--body);transition:transform .25s}
+.lang:hover{transform:translateY(-4px) scale(1.01)}
+.lang:hover::after{transform:translateX(6px)}
+.lang:focus-visible{outline:4px solid var(--ink);outline-offset:4px}
+#app.anim>*,.q.anim{animation:aparece .5s cubic-bezier(.2,.8,.2,1) both}
+#app.anim>*:nth-child(2){animation-delay:.07s}#app.anim>*:nth-child(3){animation-delay:.14s}#app.anim>*:nth-child(4){animation-delay:.21s}#app.anim>*:nth-child(5){animation-delay:.28s}
+@keyframes aparece{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes sube{from{opacity:0;transform:translateY(18px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes salta{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-9px);opacity:1}}
 @keyframes fuera{to{opacity:0}}
 @keyframes entra{to{opacity:1}}
 @keyframes sale{to{opacity:0;transform:scale(.97)}}
-@media (prefers-reduced-motion:reduce){.anim,.burbuja,.pts,.pts i,.hola,.nombre{animation:none!important}.pts{display:none}.hola,.nombre{opacity:1}}
-@media (max-width:420px){.paises{grid-template-columns:1fr}}
-@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@keyframes tinte{to{background:var(--jade);color:var(--jade-ink);border-color:var(--jade)}}
+@keyframes pop{from{transform:scale(.4)}to{transform:scale(1)}}
+@keyframes trazo{to{stroke-dashoffset:0}}
+@media (max-width:420px){.paises{grid-template-columns:1fr}.b1,.b2{padding:16px 26px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.pts{display:none}.hola,.b2,.nombre{opacity:1}.b1{background:var(--jade);color:var(--jade-ink)}.hecho path{stroke-dashoffset:0}}
 </style>
 
 </head>
 <body>
 <main class="wrap" hidden>
   <div class="top"><span class="marca" id="marca"></span><div class="idioma" role="group" aria-label="Idioma / Language"><button type="button" data-l="es" aria-pressed="false">Español</button><button type="button" data-l="en" aria-pressed="false">English</button></div></div>
-  <div class="prog" id="prog" aria-hidden="true"></div>
+  <div class="prog" aria-hidden="true"><i id="fill"></i></div>
   <p class="paso" id="paso" role="status"></p>
-  <div class="q"><h1 id="h1"></h1><p id="sub"></p></div>
+  <div class="q" id="q"><h1 id="h1"></h1><p id="sub"></p></div>
   <div id="app"></div>
 </main>
 <div class="barra" hidden><div><button type="button" class="sec" id="atras"></button><button type="button" class="main" id="sigue"></button></div></div>
-<section class="pantalla" id="intro" aria-label="WhatsApp"><div class="anim"><div class="burbuja"><span class="pts"><i></i><i></i><i></i></span><span class="hola">Hola · Hello</span></div><p class="nombre">WhatsApp · Asistente / Assistant</p></div></section>
+<section class="pantalla" id="intro" aria-label="WhatsApp"><div class="anim"><div class="b1"><span class="pts"><i></i><i></i><i></i></span><span class="hola">Hola</span></div><div class="b2">Hello</div><p class="nombre">WhatsApp · Asistente / Assistant</p></div></section>
 <section class="pantalla" id="idioma" hidden><button type="button" class="lang" data-l="en"><small>What language do you speak?</small><b>English</b></button><button type="button" class="lang" data-l="es"><small>¿Qué idioma hablas?</small><b>Español</b></button></section>
 
 <script>
-const FORM = {"version":3,"titulo":{"es":"Alta de tu asistente de WhatsApp","en":"Set up your WhatsApp assistant"},"secciones":[{"id":"ubicacion","titulo":{"es":"Dónde está tu negocio","en":"Where your business is"},"campos":[{"clave":"pais","etiqueta":{"es":"País del negocio (elige primero)","en":"Country (choose first)"},"tipo":"opcion","requerido":true,"opciones":[{"v":"US","es":"Estados Unidos","en":"United States"},{"v":"MX","es":"México","en":"Mexico"}],"ayuda":{"es":"Cambia los estados, los documentos que debes preparar y el formato de fechas (3/4 = 4 de marzo en EE. UU.).","en":"Changes the states, the documents you must prepare and the date format (3/4 = March 4 in the US)."}},{"clave":"estado","etiqueta":{"es":"Estado","en":"State"},"tipo":"opcion","requerido":true,"opcionesPor":{"MX":["Aguascalientes","Baja California","Baja California Sur","Campeche","Chiapas","Chihuahua","Ciudad de México","Coahuila","Colima","Durango","Estado de México","Guanajuato","Guerrero","Hidalgo","Jalisco","Michoacán","Morelos","Nayarit","Nuevo León","Oaxaca","Puebla","Querétaro","Quintana Roo","San Luis Potosí","Sinaloa","Sonora","Tabasco","Tamaulipas","Tlaxcala","Veracruz","Yucatán","Zacatecas"],"US":["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]},"tz":{"US":{"Alabama":"America/Chicago","Alaska":"America/Anchorage","Arizona":"America/Phoenix","Arkansas":"America/Chicago","California":"America/Los_Angeles","Colorado":"America/Denver","Connecticut":"America/New_York","Delaware":"America/New_York","District of Columbia":"America/New_York","Florida":"America/New_York","Georgia":"America/New_York","Hawaii":"Pacific/Honolulu","Idaho":"America/Denver","Illinois":"America/Chicago","Indiana":"America/New_York","Iowa":"America/Chicago","Kansas":"America/Chicago","Kentucky":"America/New_York","Louisiana":"America/Chicago","Maine":"America/New_York","Maryland":"America/New_York","Massachusetts":"America/New_York","Michigan":"America/New_York","Minnesota":"America/Chicago","Mississippi":"America/Chicago","Missouri":"America/Chicago","Montana":"America/Denver","Nebraska":"America/Chicago","Nevada":"America/Los_Angeles","New Hampshire":"America/New_York","New Jersey":"America/New_York","New Mexico":"America/Denver","New York":"America/New_York","North Carolina":"America/New_York","North Dakota":"America/Chicago","Ohio":"America/New_York","Oklahoma":"America/Chicago","Oregon":"America/Los_Angeles","Pennsylvania":"America/New_York","Rhode Island":"America/New_York","South Carolina":"America/New_York","South Dakota":"America/Chicago","Tennessee":"America/Chicago","Texas":"America/Chicago","Utah":"America/Denver","Vermont":"America/New_York","Virginia":"America/New_York","Washington":"America/Los_Angeles","West Virginia":"America/New_York","Wisconsin":"America/Chicago","Wyoming":"America/Denver"},"MX":{"Aguascalientes":"America/Mexico_City","Baja California":"America/Tijuana","Baja California Sur":"America/Mazatlan","Campeche":"America/Mexico_City","Chiapas":"America/Mexico_City","Chihuahua":"America/Chihuahua","Ciudad de México":"America/Mexico_City","Coahuila":"America/Mexico_City","Colima":"America/Mexico_City","Durango":"America/Mexico_City","Estado de México":"America/Mexico_City","Guanajuato":"America/Mexico_City","Guerrero":"America/Mexico_City","Hidalgo":"America/Mexico_City","Jalisco":"America/Mexico_City","Michoacán":"America/Mexico_City","Morelos":"America/Mexico_City","Nayarit":"America/Mazatlan","Nuevo León":"America/Monterrey","Oaxaca":"America/Mexico_City","Puebla":"America/Mexico_City","Querétaro":"America/Mexico_City","Quintana Roo":"America/Cancun","San Luis Potosí":"America/Mexico_City","Sinaloa":"America/Mazatlan","Sonora":"America/Hermosillo","Tabasco":"America/Mexico_City","Tamaulipas":"America/Mexico_City","Tlaxcala":"America/Mexico_City","Veracruz":"America/Mexico_City","Yucatán":"America/Mexico_City","Zacatecas":"America/Mexico_City"}}},{"clave":"ciudad","etiqueta":{"es":"Ciudad o municipio","en":"City"},"tipo":"texto","requerido":true},{"clave":"direccion","etiqueta":{"es":"Dirección completa","en":"Full address"},"tipo":"texto","requerido":true},{"clave":"zona_horaria","etiqueta":{"es":"Zona horaria","en":"Time zone"},"tipo":"opcion","requerido":true,"opciones":[{"v":"America/New_York","es":"Eastern (New York, Miami)","en":"Eastern (New York, Miami)","p":"US"},{"v":"America/Chicago","es":"Central (Chicago, Houston)","en":"Central (Chicago, Houston)","p":"US"},{"v":"America/Denver","es":"Mountain (Denver)","en":"Mountain (Denver)","p":"US"},{"v":"America/Phoenix","es":"Arizona (sin cambio de hora)","en":"Arizona (no daylight saving)","p":"US"},{"v":"America/Los_Angeles","es":"Pacific (Los Ángeles)","en":"Pacific (Los Angeles)","p":"US"},{"v":"America/Anchorage","es":"Alaska","en":"Alaska","p":"US"},{"v":"Pacific/Honolulu","es":"Hawái","en":"Hawaii","p":"US"},{"v":"America/Mexico_City","es":"Centro de México (CDMX, Oaxaca)","en":"Central Mexico (Mexico City, Oaxaca)","p":"MX"},{"v":"America/Cancun","es":"Cancún","en":"Cancun","p":"MX"},{"v":"America/Monterrey","es":"Monterrey","en":"Monterrey","p":"MX"},{"v":"America/Tijuana","es":"Tijuana","en":"Tijuana","p":"MX"},{"v":"America/Mazatlan","es":"Pacífico de México (Mazatlán)","en":"Mexican Pacific (Mazatlan)","p":"MX"},{"v":"America/Hermosillo","es":"Sonora (sin cambio de hora)","en":"Sonora (no daylight saving)","p":"MX"},{"v":"America/Chihuahua","es":"Chihuahua","en":"Chihuahua","p":"MX"}],"ayuda":{"es":"Se llena sola al elegir el estado. Corrígela si tu ciudad usa otra.","en":"Filled in when you pick the state. Change it if your city uses another."}}]},{"id":"negocio","titulo":{"es":"El negocio","en":"Your business"},"campos":[{"clave":"nombre","etiqueta":{"es":"Nombre del negocio","en":"Business name"},"tipo":"texto","requerido":true},{"clave":"razon_social","etiqueta":{"es":"Nombre legal del negocio (igual que en tus documentos)","en":"Legal business name (exactly as on your documents)"},"tipo":"texto","requerido":true,"ayuda":{"es":"Meta compara este nombre con tus documentos. Si no coincide, rechaza la verificación.","en":"Meta compares this name with your documents. If it does not match, verification is rejected."}},{"clave":"giro","etiqueta":{"es":"Tipo de negocio","en":"Type of business"},"tipo":"opcion","requerido":true,"opciones":[{"v":"hotel","es":"Hotel u hospedaje","en":"Hotel or lodging"},{"v":"restaurante","es":"Restaurante","en":"Restaurant"},{"v":"citas","es":"Negocio de citas (salón, barbería, taller, spa…)","en":"Appointment business (salon, barbershop, auto shop, spa…)"}],"ayuda":{"es":"Define qué datos pide el asistente al reservar o agendar.","en":"This sets what the assistant asks for when someone books."}},{"clave":"idioma","etiqueta":{"es":"Idioma en el que escribes tus respuestas","en":"Language you write your answers in"},"tipo":"opcion","requerido":true,"opciones":[{"v":"es","es":"Español","en":"Spanish"},{"v":"en","es":"Inglés","en":"English"}],"ayuda":{"es":"El asistente contesta en el idioma del cliente y traduce tus respuestas si hace falta.","en":"The assistant replies in the customer's language and translates your answers if needed."}},{"clave":"salud","etiqueta":{"es":"¿Atiendes pacientes o manejas información de salud?","en":"Do you treat patients or handle health information?"},"tipo":"opcion","requerido":true,"opciones":[{"v":"no","es":"No","en":"No"},{"v":"si","es":"Sí (clínica, dentista, consultorio…)","en":"Yes (clinic, dentist, medical office…)"}],"ayuda":{"es":"En Estados Unidos WhatsApp no se puede usar para información de salud. Si contestas Sí te proponemos otra vía.","en":"In the United States WhatsApp cannot be used for health information. If you answer Yes we will suggest another channel."}},{"clave":"sitio_web","etiqueta":{"es":"Sitio web o página de Facebook/Instagram del negocio","en":"Business website or Facebook/Instagram page"},"tipo":"texto","requerido":true},{"clave":"url_privacidad","etiqueta":{"es":"Enlace a tu aviso de privacidad","en":"Link to your privacy policy"},"tipo":"texto","requerido":false,"ayuda":{"es":"Si no lo tienes, avísanos. En México se llama aviso de privacidad; en EE. UU., privacy policy.","en":"If you do not have one, tell us. In the US it is called a privacy policy."}}]},{"id":"whatsapp","titulo":{"es":"WhatsApp","en":"WhatsApp"},"campos":[{"clave":"telefono_bot","etiqueta":{"es":"Número de WhatsApp del asistente (con lada de país, solo dígitos)","en":"WhatsApp number for the assistant (with country code, digits only)"},"tipo":"telefono","requerido":true,"ayuda":{"es":"Debe ser un número que NO esté activo en la app normal de WhatsApp.","en":"It must be a number that is NOT active in the regular WhatsApp app."}},{"clave":"dueno_nombre","etiqueta":{"es":"Quién recibe los avisos","en":"Who receives the alerts"},"tipo":"texto","requerido":true},{"clave":"dueno_telefono","etiqueta":{"es":"WhatsApp de esa persona (con lada de país, solo dígitos)","en":"That person's WhatsApp (with country code, digits only)"},"tipo":"telefono","requerido":true},{"clave":"dueno_correo","etiqueta":{"es":"Correo de esa persona","en":"That person's email"},"tipo":"correo","requerido":false}]},{"id":"respuestas","titulo":{"es":"Lo que el asistente puede contestar (texto real, sin inventar)","en":"What the assistant can answer (real text, nothing made up)"},"campos":[{"clave":"resp_tarifas","etiqueta":{"es":"Tarifas y qué incluyen","en":"Prices and what is included"},"tipo":"largo","requerido":true},{"clave":"resp_horarios","etiqueta":{"es":"Horarios (atención, check-in/check-out, cocina…)","en":"Hours (opening, check-in/check-out, kitchen…)"},"tipo":"largo","requerido":true},{"clave":"resp_ubicacion","etiqueta":{"es":"Cómo llegar / ubicación","en":"How to get there / location"},"tipo":"largo","requerido":true},{"clave":"resp_servicios","etiqueta":{"es":"Servicios o menú (texto editable, no imagen)","en":"Services or menu (editable text, not an image)"},"tipo":"largo","requerido":false},{"clave":"resp_politicas","etiqueta":{"es":"Políticas (cancelación, mascotas, niños, pagos)","en":"Policies (cancellation, pets, children, payments)"},"tipo":"largo","requerido":false}]},{"id":"politicas","titulo":{"es":"Reglas de tu país","en":"Rules in your country"},"campos":[{"clave":"acepta_mx","paises":["MX"],"etiqueta":{"es":"Confirmo que mis clientes me escriben o aceptaron que los contacte, y que tengo (o publicaré) mi aviso de privacidad.","en":"I confirm my customers contact me or agreed to be contacted, and that I have (or will publish) my privacy notice."},"tipo":"opcion","requerido":true,"opciones":[{"v":"si","es":"Sí, confirmo","en":"Yes, I confirm"}]},{"clave":"acepta_us","paises":["US"],"etiqueta":{"es":"Confirmo que mis clientes me escriben o aceptaron que los contacte, que tengo (o publicaré) mi política de privacidad y que no usaré este asistente para información de salud de pacientes.","en":"I confirm my customers contact me or agreed to be contacted, that I have (or will publish) a privacy policy, and that I will not use this assistant for patient health information."},"tipo":"opcion","requerido":true,"opciones":[{"v":"si","es":"Sí, confirmo","en":"Yes, I confirm"}]}]},{"id":"tono","titulo":{"es":"Tono","en":"Tone"},"campos":[{"clave":"saludo","etiqueta":{"es":"Cómo saluda el asistente (usa {nombre} para tu negocio)","en":"How the assistant greets (use {nombre} for your business)"},"tipo":"largo","requerido":false},{"clave":"pausa_min","etiqueta":{"es":"Minutos que el asistente calla cuando entra una persona","en":"Minutes the assistant stays quiet when a person steps in"},"tipo":"entero","requerido":false,"defecto":30}]}],"requisitos":{"titulo":{"es":"Lo que necesitas preparar","en":"What you need to prepare"},"nota":{"es":"Es una guía. Meta puede pedir otros documentos. No es asesoría legal.","en":"This is a guide. Meta may ask for other documents. Not legal advice."},"comun":[{"es":"Cuenta de Meta Business (business.facebook.com) donde seas administrador.","en":"A Meta Business account (business.facebook.com) where you are an admin."},{"es":"Verificación del negocio en Meta. Puede tardar días: empieza primero.","en":"Business verification with Meta. It can take days: start first."},{"es":"Un número solo para el asistente. No puede estar activo en la app normal de WhatsApp y debe recibir un código por SMS o llamada.","en":"A number just for the assistant. It cannot be active in the regular WhatsApp app and must receive a code by SMS or call."},{"es":"Método de pago en Meta (tarjeta).","en":"A payment method in Meta (card)."},{"es":"Acceso para configurarlo: agrega como administrador a quien te lo pida, o crea un usuario del sistema. Nunca mandes contraseñas ni tokens por chat.","en":"Access to set it up: add whoever asked you as an admin, or create a system user. Never send passwords or tokens in chat."},{"es":"Logo del negocio (imagen cuadrada).","en":"Your business logo (square image)."}],"MX":[{"es":"Constancia de situación fiscal del SAT (RFC) o, si es persona moral, acta constitutiva.","en":"SAT tax status certificate (RFC) or, for a company, articles of incorporation."},{"es":"Comprobante de domicilio reciente (luz, agua o teléfono) con el nombre y dirección del negocio.","en":"Recent proof of address (utility or phone bill) with the business name and address."},{"es":"Aviso de privacidad publicado (ley LFPDPPP).","en":"A published privacy notice (LFPDPPP law)."},{"es":"Si manejas datos de salud: consentimiento expreso del paciente y no guardar datos clínicos en el chat.","en":"If you handle health data: express patient consent, and no clinical data in the chat."}],"US":[{"es":"Carta del IRS con tu EIN (CP 575 o 147C), o los artículos de constitución (LLC/Corp).","en":"IRS letter with your EIN (CP 575 or 147C), or your articles of organization/incorporation."},{"es":"Licencia de negocio estatal o local.","en":"State or local business license."},{"es":"Recibo de servicios o estado de cuenta bancario con el nombre legal y la dirección del negocio.","en":"Utility bill or bank statement showing the legal name and business address."},{"es":"Política de privacidad (privacy policy) en tu sitio.","en":"A privacy policy on your website."},{"es":"Solo escribimos a quien te escribió primero o aceptó que lo contactes (opt-in).","en":"We only message people who wrote to you first or agreed to be contacted (opt-in)."},{"es":"Salud: en EE. UU. no se puede usar WhatsApp con información de pacientes (HIPAA).","en":"Health: in the US WhatsApp cannot be used with patient information (HIPAA)."}]},"politicas":{"nota":{"es":"Guía general, no asesoría legal. Si algo no aplica a tu negocio, confirma y sigue.","en":"General guide, not legal advice. If something does not apply to your business, confirm and move on."},"MX":[{"t":{"es":"Aviso de privacidad","en":"Privacy notice"},"x":{"es":"La ley mexicana (LFPDPPP) te pide avisar a tus clientes cómo usas sus datos. Ten tu aviso de privacidad publicado.","en":"Mexican law (LFPDPPP) requires you to tell customers how you use their data. Have your privacy notice published."}},{"t":{"es":"Solo con permiso","en":"Permission first"},"x":{"es":"Meta exige que la persona te haya escrito o aceptado que la contactes. No agregues números sin su permiso.","en":"Meta requires that the person wrote to you or agreed to be contacted. Do not add numbers without permission."}},{"t":{"es":"Salud (datos sensibles)","en":"Health (sensitive data)"},"x":{"es":"Si atiendes pacientes: pide consentimiento expreso y no guardes datos clínicos en el chat.","en":"If you treat patients: get express consent and keep clinical data out of the chat."}},{"t":{"es":"Derechos de tus clientes","en":"Your customers' rights"},"x":{"es":"Tus clientes pueden pedir ver, corregir o borrar sus datos (derechos ARCO). Si alguien lo pide, avísanos.","en":"Your customers can ask to see, fix or delete their data (ARCO rights). If someone asks, tell us."}}],"US":[{"t":{"es":"Permiso primero (opt-in)","en":"Permission first (opt-in)"},"x":{"es":"Meta exige que la persona te haya escrito o aceptado que la contactes. No agregues números sin su permiso.","en":"Meta requires that the person wrote to you or agreed to be contacted. Do not add numbers without permission."}},{"t":{"es":"Política de privacidad","en":"Privacy policy"},"x":{"es":"Publica una política de privacidad. Si atiendes a residentes de California, las leyes estatales (CCPA/CPRA) pueden aplicar a tu negocio.","en":"Publish a privacy policy. If you serve California residents, state privacy laws (CCPA/CPRA) may apply to your business."}},{"t":{"es":"Sin información de salud","en":"No health information"},"x":{"es":"WhatsApp no se puede usar con información de pacientes (HIPAA). Si manejas datos de salud, te proponemos otro canal.","en":"WhatsApp cannot be used with patient information (HIPAA). If you handle health data, we will suggest another channel."}},{"t":{"es":"Solo respuestas y reservas","en":"Answers and bookings only"},"x":{"es":"El asistente contesta dudas y recibe solicitudes de reserva. No manda promociones.","en":"The assistant answers questions and takes booking requests. It does not send promotions."}},{"t":{"es":"Si piden que dejes de escribir","en":"If someone asks you to stop"},"x":{"es":"Si alguien pide que no le escribas más, avísanos y lo dejamos de contactar.","en":"If someone asks you to stop messaging them, tell us and we will stop contacting them."}}]}};
+const FORM = {"version":3,"titulo":{"es":"Alta de tu asistente de WhatsApp","en":"Set up your WhatsApp assistant"},"secciones":[{"id":"ubicacion","titulo":{"es":"Dónde está tu negocio","en":"Where your business is"},"campos":[{"clave":"pais","etiqueta":{"es":"País del negocio (elige primero)","en":"Country (choose first)"},"tipo":"opcion","requerido":true,"opciones":[{"v":"US","es":"Estados Unidos","en":"United States"},{"v":"MX","es":"México","en":"Mexico"}],"ayuda":{"es":"Cambia los estados, los documentos que debes preparar y el formato de fechas (3/4 = 4 de marzo en EE. UU.).","en":"Changes the states, the documents you must prepare and the date format (3/4 = March 4 in the US)."}},{"clave":"estado","etiqueta":{"es":"Estado","en":"State"},"tipo":"opcion","requerido":true,"opcionesPor":{"MX":["Aguascalientes","Baja California","Baja California Sur","Campeche","Chiapas","Chihuahua","Ciudad de México","Coahuila","Colima","Durango","Estado de México","Guanajuato","Guerrero","Hidalgo","Jalisco","Michoacán","Morelos","Nayarit","Nuevo León","Oaxaca","Puebla","Querétaro","Quintana Roo","San Luis Potosí","Sinaloa","Sonora","Tabasco","Tamaulipas","Tlaxcala","Veracruz","Yucatán","Zacatecas"],"US":["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]},"tz":{"US":{"Alabama":"America/Chicago","Alaska":"America/Anchorage","Arizona":"America/Phoenix","Arkansas":"America/Chicago","California":"America/Los_Angeles","Colorado":"America/Denver","Connecticut":"America/New_York","Delaware":"America/New_York","District of Columbia":"America/New_York","Florida":"America/New_York","Georgia":"America/New_York","Hawaii":"Pacific/Honolulu","Idaho":"America/Denver","Illinois":"America/Chicago","Indiana":"America/New_York","Iowa":"America/Chicago","Kansas":"America/Chicago","Kentucky":"America/New_York","Louisiana":"America/Chicago","Maine":"America/New_York","Maryland":"America/New_York","Massachusetts":"America/New_York","Michigan":"America/New_York","Minnesota":"America/Chicago","Mississippi":"America/Chicago","Missouri":"America/Chicago","Montana":"America/Denver","Nebraska":"America/Chicago","Nevada":"America/Los_Angeles","New Hampshire":"America/New_York","New Jersey":"America/New_York","New Mexico":"America/Denver","New York":"America/New_York","North Carolina":"America/New_York","North Dakota":"America/Chicago","Ohio":"America/New_York","Oklahoma":"America/Chicago","Oregon":"America/Los_Angeles","Pennsylvania":"America/New_York","Rhode Island":"America/New_York","South Carolina":"America/New_York","South Dakota":"America/Chicago","Tennessee":"America/Chicago","Texas":"America/Chicago","Utah":"America/Denver","Vermont":"America/New_York","Virginia":"America/New_York","Washington":"America/Los_Angeles","West Virginia":"America/New_York","Wisconsin":"America/Chicago","Wyoming":"America/Denver"},"MX":{"Aguascalientes":"America/Mexico_City","Baja California":"America/Tijuana","Baja California Sur":"America/Mazatlan","Campeche":"America/Mexico_City","Chiapas":"America/Mexico_City","Chihuahua":"America/Chihuahua","Ciudad de México":"America/Mexico_City","Coahuila":"America/Mexico_City","Colima":"America/Mexico_City","Durango":"America/Mexico_City","Estado de México":"America/Mexico_City","Guanajuato":"America/Mexico_City","Guerrero":"America/Mexico_City","Hidalgo":"America/Mexico_City","Jalisco":"America/Mexico_City","Michoacán":"America/Mexico_City","Morelos":"America/Mexico_City","Nayarit":"America/Mazatlan","Nuevo León":"America/Monterrey","Oaxaca":"America/Mexico_City","Puebla":"America/Mexico_City","Querétaro":"America/Mexico_City","Quintana Roo":"America/Cancun","San Luis Potosí":"America/Mexico_City","Sinaloa":"America/Mazatlan","Sonora":"America/Hermosillo","Tabasco":"America/Mexico_City","Tamaulipas":"America/Mexico_City","Tlaxcala":"America/Mexico_City","Veracruz":"America/Mexico_City","Yucatán":"America/Mexico_City","Zacatecas":"America/Mexico_City"}}},{"clave":"ciudad","etiqueta":{"es":"Ciudad o municipio","en":"City"},"tipo":"texto","requerido":true},{"clave":"direccion","etiqueta":{"es":"Dirección completa","en":"Full address"},"tipo":"texto","requerido":true},{"clave":"zona_horaria","etiqueta":{"es":"Zona horaria","en":"Time zone"},"tipo":"opcion","requerido":true,"opciones":[{"v":"America/New_York","es":"Eastern (New York, Miami)","en":"Eastern (New York, Miami)","p":"US"},{"v":"America/Chicago","es":"Central (Chicago, Houston)","en":"Central (Chicago, Houston)","p":"US"},{"v":"America/Denver","es":"Mountain (Denver)","en":"Mountain (Denver)","p":"US"},{"v":"America/Phoenix","es":"Arizona (sin cambio de hora)","en":"Arizona (no daylight saving)","p":"US"},{"v":"America/Los_Angeles","es":"Pacific (Los Ángeles)","en":"Pacific (Los Angeles)","p":"US"},{"v":"America/Anchorage","es":"Alaska","en":"Alaska","p":"US"},{"v":"Pacific/Honolulu","es":"Hawái","en":"Hawaii","p":"US"},{"v":"America/Mexico_City","es":"Centro de México (CDMX, Oaxaca)","en":"Central Mexico (Mexico City, Oaxaca)","p":"MX"},{"v":"America/Cancun","es":"Cancún","en":"Cancun","p":"MX"},{"v":"America/Monterrey","es":"Monterrey","en":"Monterrey","p":"MX"},{"v":"America/Tijuana","es":"Tijuana","en":"Tijuana","p":"MX"},{"v":"America/Mazatlan","es":"Pacífico de México (Mazatlán)","en":"Mexican Pacific (Mazatlan)","p":"MX"},{"v":"America/Hermosillo","es":"Sonora (sin cambio de hora)","en":"Sonora (no daylight saving)","p":"MX"},{"v":"America/Chihuahua","es":"Chihuahua","en":"Chihuahua","p":"MX"}],"ayuda":{"es":"Se llena sola al elegir el estado. Corrígela si tu ciudad usa otra.","en":"Filled in when you pick the state. Change it if your city uses another."}}]},{"id":"negocio","titulo":{"es":"El negocio","en":"Your business"},"campos":[{"clave":"nombre","etiqueta":{"es":"Nombre del negocio","en":"Business name"},"tipo":"texto","requerido":true},{"clave":"razon_social","etiqueta":{"es":"Nombre legal del negocio (igual que en tus documentos)","en":"Legal business name (exactly as on your documents)"},"tipo":"texto","requerido":true,"ayuda":{"es":"Meta compara este nombre con tus documentos. Si no coincide, rechaza la verificación.","en":"Meta compares this name with your documents. If it does not match, verification is rejected."}},{"clave":"giro","etiqueta":{"es":"Tipo de negocio","en":"Type of business"},"tipo":"opcion","requerido":true,"opciones":[{"v":"hotel","es":"Hotel u hospedaje","en":"Hotel or lodging"},{"v":"restaurante","es":"Restaurante","en":"Restaurant"},{"v":"citas","es":"Negocio de citas (salón, barbería, taller, spa…)","en":"Appointment business (salon, barbershop, auto shop, spa…)"},{"v":"clinica","es":"Clínica, consultorio o dentista","en":"Clinic, medical office or dentist"}],"ayuda":{"es":"Define qué datos pide el asistente al reservar. Las clínicas agendan citas y se tratan como negocio de salud.","en":"This sets what the assistant asks for when someone books. Clinics book appointments and are treated as a health business."}},{"clave":"idioma","etiqueta":{"es":"Idioma en el que escribes tus respuestas","en":"Language you write your answers in"},"tipo":"opcion","requerido":true,"opciones":[{"v":"es","es":"Español","en":"Spanish"},{"v":"en","es":"Inglés","en":"English"}],"ayuda":{"es":"El asistente contesta en el idioma del cliente y traduce tus respuestas si hace falta.","en":"The assistant replies in the customer's language and translates your answers if needed."}},{"clave":"salud","etiqueta":{"es":"¿Atiendes pacientes o manejas información de salud?","en":"Do you treat patients or handle health information?"},"tipo":"opcion","requerido":true,"opciones":[{"v":"no","es":"No","en":"No"},{"v":"si","es":"Sí (clínica, dentista, consultorio…)","en":"Yes (clinic, dentist, medical office…)"}],"ayuda":{"es":"En Estados Unidos WhatsApp no se puede usar para información de salud. Si contestas Sí te proponemos otra vía.","en":"In the United States WhatsApp cannot be used for health information. If you answer Yes we will suggest another channel."},"ocultoSi":{"giro":"clinica"}},{"clave":"sitio_web","etiqueta":{"es":"Sitio web o página de Facebook/Instagram del negocio","en":"Business website or Facebook/Instagram page"},"tipo":"texto","requerido":true},{"clave":"url_privacidad","etiqueta":{"es":"Enlace a tu aviso de privacidad","en":"Link to your privacy policy"},"tipo":"texto","requerido":false,"ayuda":{"es":"Si no lo tienes, avísanos. En México se llama aviso de privacidad; en EE. UU., privacy policy.","en":"If you do not have one, tell us. In the US it is called a privacy policy."}}]},{"id":"whatsapp","titulo":{"es":"WhatsApp","en":"WhatsApp"},"campos":[{"clave":"telefono_bot","etiqueta":{"es":"Número de WhatsApp del asistente (con lada de país, solo dígitos)","en":"WhatsApp number for the assistant (with country code, digits only)"},"tipo":"telefono","requerido":true,"ayuda":{"es":"Debe ser un número que NO esté activo en la app normal de WhatsApp.","en":"It must be a number that is NOT active in the regular WhatsApp app."}},{"clave":"dueno_nombre","etiqueta":{"es":"Quién recibe los avisos","en":"Who receives the alerts"},"tipo":"texto","requerido":true},{"clave":"dueno_telefono","etiqueta":{"es":"WhatsApp de esa persona (con lada de país, solo dígitos)","en":"That person's WhatsApp (with country code, digits only)"},"tipo":"telefono","requerido":true},{"clave":"dueno_correo","etiqueta":{"es":"Correo de esa persona","en":"That person's email"},"tipo":"correo","requerido":false}]},{"id":"respuestas","titulo":{"es":"Lo que el asistente puede contestar (texto real, sin inventar)","en":"What the assistant can answer (real text, nothing made up)"},"campos":[{"clave":"resp_tarifas","etiqueta":{"es":"Tarifas y qué incluyen","en":"Prices and what is included"},"tipo":"largo","requerido":true},{"clave":"resp_horarios","etiqueta":{"es":"Horarios (atención, check-in/check-out, cocina…)","en":"Hours (opening, check-in/check-out, kitchen…)"},"tipo":"largo","requerido":true},{"clave":"resp_ubicacion","etiqueta":{"es":"Cómo llegar / ubicación","en":"How to get there / location"},"tipo":"largo","requerido":true},{"clave":"resp_servicios","etiqueta":{"es":"Servicios o menú (texto editable, no imagen)","en":"Services or menu (editable text, not an image)"},"tipo":"largo","requerido":false},{"clave":"resp_politicas","etiqueta":{"es":"Políticas (cancelación, mascotas, niños, pagos)","en":"Policies (cancellation, pets, children, payments)"},"tipo":"largo","requerido":false}]},{"id":"politicas","titulo":{"es":"Reglas de tu país","en":"Rules in your country"},"campos":[{"clave":"acepta_mx","paises":["MX"],"etiqueta":{"es":"Confirmo que mis clientes me escriben o aceptaron que los contacte, y que tengo (o publicaré) mi aviso de privacidad.","en":"I confirm my customers contact me or agreed to be contacted, and that I have (or will publish) my privacy notice."},"tipo":"opcion","requerido":true,"opciones":[{"v":"si","es":"Sí, confirmo","en":"Yes, I confirm"}]},{"clave":"acepta_us","paises":["US"],"etiqueta":{"es":"Confirmo que mis clientes me escriben o aceptaron que los contacte, que tengo (o publicaré) mi política de privacidad y que no usaré este asistente para información de salud de pacientes.","en":"I confirm my customers contact me or agreed to be contacted, that I have (or will publish) a privacy policy, and that I will not use this assistant for patient health information."},"tipo":"opcion","requerido":true,"opciones":[{"v":"si","es":"Sí, confirmo","en":"Yes, I confirm"}]}]},{"id":"tono","titulo":{"es":"Tono","en":"Tone"},"campos":[{"clave":"saludo","etiqueta":{"es":"Cómo saluda el asistente (usa {nombre} para tu negocio)","en":"How the assistant greets (use {nombre} for your business)"},"tipo":"largo","requerido":false},{"clave":"pausa_min","etiqueta":{"es":"Minutos que el asistente calla cuando entra una persona","en":"Minutes the assistant stays quiet when a person steps in"},"tipo":"entero","requerido":false,"defecto":30}]}],"requisitos":{"titulo":{"es":"Lo que necesitas preparar","en":"What you need to prepare"},"nota":{"es":"Es una guía. Meta puede pedir otros documentos. No es asesoría legal.","en":"This is a guide. Meta may ask for other documents. Not legal advice."},"comun":[{"es":"Cuenta de Meta Business (business.facebook.com) donde seas administrador.","en":"A Meta Business account (business.facebook.com) where you are an admin."},{"es":"Verificación del negocio en Meta. Puede tardar días: empieza primero.","en":"Business verification with Meta. It can take days: start first."},{"es":"Un número solo para el asistente. No puede estar activo en la app normal de WhatsApp y debe recibir un código por SMS o llamada.","en":"A number just for the assistant. It cannot be active in the regular WhatsApp app and must receive a code by SMS or call."},{"es":"Método de pago en Meta (tarjeta).","en":"A payment method in Meta (card)."},{"es":"Acceso para configurarlo: agrega como administrador a quien te lo pida, o crea un usuario del sistema. Nunca mandes contraseñas ni tokens por chat.","en":"Access to set it up: add whoever asked you as an admin, or create a system user. Never send passwords or tokens in chat."},{"es":"Logo del negocio (imagen cuadrada).","en":"Your business logo (square image)."}],"MX":[{"es":"Constancia de situación fiscal del SAT (RFC) o, si es persona moral, acta constitutiva.","en":"SAT tax status certificate (RFC) or, for a company, articles of incorporation."},{"es":"Comprobante de domicilio reciente (luz, agua o teléfono) con el nombre y dirección del negocio.","en":"Recent proof of address (utility or phone bill) with the business name and address."},{"es":"Aviso de privacidad publicado (ley LFPDPPP).","en":"A published privacy notice (LFPDPPP law)."},{"es":"Si manejas datos de salud: consentimiento expreso del paciente y no guardar datos clínicos en el chat.","en":"If you handle health data: express patient consent, and no clinical data in the chat."}],"US":[{"es":"Carta del IRS con tu EIN (CP 575 o 147C), o los artículos de constitución (LLC/Corp).","en":"IRS letter with your EIN (CP 575 or 147C), or your articles of organization/incorporation."},{"es":"Licencia de negocio estatal o local.","en":"State or local business license."},{"es":"Recibo de servicios o estado de cuenta bancario con el nombre legal y la dirección del negocio.","en":"Utility bill or bank statement showing the legal name and business address."},{"es":"Política de privacidad (privacy policy) en tu sitio.","en":"A privacy policy on your website."},{"es":"Solo escribimos a quien te escribió primero o aceptó que lo contactes (opt-in).","en":"We only message people who wrote to you first or agreed to be contacted (opt-in)."},{"es":"Salud: en EE. UU. no se puede usar WhatsApp con información de pacientes (HIPAA).","en":"Health: in the US WhatsApp cannot be used with patient information (HIPAA)."}]},"politicas":{"nota":{"es":"Guía general, no asesoría legal. Si algo no aplica a tu negocio, confirma y sigue.","en":"General guide, not legal advice. If something does not apply to your business, confirm and move on."},"MX":[{"t":{"es":"Aviso de privacidad","en":"Privacy notice"},"x":{"es":"La ley mexicana (LFPDPPP) te pide avisar a tus clientes cómo usas sus datos. Ten tu aviso de privacidad publicado.","en":"Mexican law (LFPDPPP) requires you to tell customers how you use their data. Have your privacy notice published."}},{"t":{"es":"Solo con permiso","en":"Permission first"},"x":{"es":"Meta exige que la persona te haya escrito o aceptado que la contactes. No agregues números sin su permiso.","en":"Meta requires that the person wrote to you or agreed to be contacted. Do not add numbers without permission."}},{"t":{"es":"Salud (datos sensibles)","en":"Health (sensitive data)"},"x":{"es":"Si atiendes pacientes: pide consentimiento expreso y no guardes datos clínicos en el chat.","en":"If you treat patients: get express consent and keep clinical data out of the chat."}},{"t":{"es":"Derechos de tus clientes","en":"Your customers' rights"},"x":{"es":"Tus clientes pueden pedir ver, corregir o borrar sus datos (derechos ARCO). Si alguien lo pide, avísanos.","en":"Your customers can ask to see, fix or delete their data (ARCO rights). If someone asks, tell us."}}],"US":[{"t":{"es":"Permiso primero (opt-in)","en":"Permission first (opt-in)"},"x":{"es":"Meta exige que la persona te haya escrito o aceptado que la contactes. No agregues números sin su permiso.","en":"Meta requires that the person wrote to you or agreed to be contacted. Do not add numbers without permission."}},{"t":{"es":"Política de privacidad","en":"Privacy policy"},"x":{"es":"Publica una política de privacidad. Si atiendes a residentes de California, las leyes estatales (CCPA/CPRA) pueden aplicar a tu negocio.","en":"Publish a privacy policy. If you serve California residents, state privacy laws (CCPA/CPRA) may apply to your business."}},{"t":{"es":"Sin información de salud","en":"No health information"},"x":{"es":"WhatsApp no se puede usar con información de pacientes (HIPAA). Si manejas datos de salud, te proponemos otro canal.","en":"WhatsApp cannot be used with patient information (HIPAA). If you handle health data, we will suggest another channel."}},{"t":{"es":"Solo respuestas y reservas","en":"Answers and bookings only"},"x":{"es":"El asistente contesta dudas y recibe solicitudes de reserva. No manda promociones.","en":"The assistant answers questions and takes booking requests. It does not send promotions."}},{"t":{"es":"Si piden que dejes de escribir","en":"If someone asks you to stop"},"x":{"es":"Si alguien pide que no le escribas más, avísanos y lo dejamos de contactar.","en":"If someone asks you to stop messaging them, tell us and we will stop contacting them."}}]}};
 const T = {
-  es: { marca: 'Alta de tu asistente de WhatsApp', paso: (n, m) => `Paso ${n} de ${m}`, atras: 'Atrás', sigue: 'Siguiente', revisar: 'Revisar', copiar: 'Copiar datos para enviar', req: 'obligatorio', opt: 'opcional', elige: 'Elige…',
+  es: { marca: 'Alta de tu <em>asistente</em>', paso: (n, m) => `Paso ${n} de ${m}`, atras: 'Atrás', sigue: 'Siguiente', revisar: 'Revisar', copiar: 'Copiar datos para enviar', req: 'obligatorio', opt: 'opcional', elige: 'Elige…',
     falta: 'Falta este dato.', tel: 'Solo dígitos, con lada de país. Ejemplos: 529511234567 (México), 15551234567 (EE. UU.).', mail: 'Ese correo no parece válido.', ent: 'Escribe un número entero.', telAyuda: 'Con lada de país, sin + ni espacios.',
     opcionales: 'Más opciones (opcional)',
     q: { ubicacion: ['¿De dónde es tu negocio?', 'Elige primero el país. Cambia los estados y lo que necesitas preparar.'], negocio: ['Cuéntame de tu negocio', 'Usa el nombre legal igual que en tus documentos.'], whatsapp: ['¿Con qué número atenderá el asistente?', 'Y quién recibe los avisos cuando alguien pide una persona.'], respuestas: ['¿Qué puede contestar el asistente?', 'Solo contesta con lo que escribas aquí. No inventa precios ni horarios.'], politicas: ['Reglas de tu país', 'Léelas rápido y confirma.'], revision: ['Todo listo. Revisa y copia.', 'Nada se envía desde esta página. Tú copias el resultado y lo mandas.'] },
-    paisSub: { MX: '32 estados. Hotel, restaurante, citas y salud (con consentimiento).', US: '50 estados y D.C. Hotel, restaurante y citas. Salud no disponible (HIPAA).' },
+    paisSub: { MX: '32 estados. Hotel, restaurante, citas y clínicas (con consentimiento).', US: '50 estados y D.C. Hotel, restaurante y citas. Clínicas no disponibles (HIPAA).' },
     bloqueo: 'En Estados Unidos WhatsApp no se puede usar con información de salud de pacientes (Meta no firma el acuerdo HIPAA). Puedes enviar este formulario igual: te propondremos otra vía, como mensajes de texto con un proveedor que sí lo firme.',
     saludMx: 'En México se permite con consentimiento expreso del paciente y sin guardar datos clínicos en el chat.',
-    resumen: 'Tus datos', lista: n => `${n} listos`, ya: 'Ya lo tengo',
-    copiado: 'Copiado. Pégalo en un mensaje y mándalo a quien te pidió este formulario.', manual: 'Selecciona todo el texto de abajo, cópialo y mándalo a quien te pidió este formulario.', corrige: 'Revisa los datos marcados.' },
-  en: { marca: 'Set up your WhatsApp assistant', paso: (n, m) => `Step ${n} of ${m}`, atras: 'Back', sigue: 'Next', revisar: 'Review', copiar: 'Copy details to send', req: 'required', opt: 'optional', elige: 'Choose…',
+    lista: n => `${n} listos`,
+    copiado: 'Copiado. Pégalo en un mensaje y mándalo a quien te pidió este formulario.', manual: 'Selecciona todo el texto de abajo, cópialo y mándalo a quien te pidió este formulario.' },
+  en: { marca: 'Set up your <em>assistant</em>', paso: (n, m) => `Step ${n} of ${m}`, atras: 'Back', sigue: 'Next', revisar: 'Review', copiar: 'Copy details to send', req: 'required', opt: 'optional', elige: 'Choose…',
     falta: 'This field is required.', tel: 'Digits only, with country code. Examples: 15551234567 (US), 529511234567 (Mexico).', mail: 'That email does not look valid.', ent: 'Enter a whole number.', telAyuda: 'With country code, no + or spaces.',
     opcionales: 'More options (optional)',
     q: { ubicacion: ['Where is your business?', 'Pick the country first. It changes the states and what you need to prepare.'], negocio: ['Tell me about your business', 'Use the legal name exactly as on your documents.'], whatsapp: ['Which number will the assistant use?', 'And who gets the alerts when someone asks for a person.'], respuestas: ['What can the assistant answer?', 'It only answers with what you write here. It never makes up prices or hours.'], politicas: ['Rules in your country', 'Read them quickly and confirm.'], revision: ['All set. Review and copy.', 'Nothing is sent from this page. You copy the result and send it yourself.'] },
-    paisSub: { MX: '32 states. Hotels, restaurants, appointments and health (with consent).', US: '50 states and D.C. Hotels, restaurants and appointments. Health not available (HIPAA).' },
+    paisSub: { MX: '32 states. Hotels, restaurants, appointments and clinics (with consent).', US: '50 states and D.C. Hotels, restaurants and appointments. Clinics not available (HIPAA).' },
     bloqueo: 'In the United States WhatsApp cannot be used with patient health information (Meta does not sign a HIPAA agreement). You can still send this form: we will propose another channel, such as text messages through a provider that does sign one.',
     saludMx: 'In Mexico it is allowed with the patient\'s express consent and no clinical data stored in the chat.',
-    resumen: 'Your details', lista: n => `${n} ready`, ya: 'I have it',
-    copiado: 'Copied. Paste it into a message and send it to whoever gave you this form.', manual: 'Select all the text below, copy it and send it to whoever gave you this form.', corrige: 'Check the highlighted fields.' },
+    lista: n => `${n} ready`,
+    copiado: 'Copied. Paste it into a message and send it to whoever gave you this form.', manual: 'Select all the text below, copy it and send it to whoever gave you this form.' },
 };
 const PASOS = [['ubicacion'], ['negocio'], ['whatsapp'], ['respuestas', 'tono'], ['politicas'], []];
+const CLAVES_PASO = ['ubicacion', 'negocio', 'whatsapp', 'respuestas', 'politicas', 'revision'];
 const LLAVE = 'alta-whatsapp-v3', LLAVE_L = 'alta-whatsapp-idioma';
 const $ = x => document.querySelector(x);
 const esc = x => String(x).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 let S = (() => { try { return JSON.parse(localStorage.getItem(LLAVE) || '{}'); } catch { return {}; } })();
-let L = (() => { try { const g = localStorage.getItem(LLAVE_L); if (g) return g; } catch {} return /^es/i.test(navigator.language || '') ? 'es' : 'en'; })();
-let paso = 0, tocado = false, msgCopia = null;
+let L = /^es/i.test(navigator.language || '') ? 'es' : 'en';
+let paso = 0, tocado = false, msgCopia = null, animar = true;
 const u = k => T[L][k];
 const seccion = id => FORM.secciones.find(s => s.id === id);
 const campos = FORM.secciones.flatMap(s => s.campos);
 const val = c => S[c.clave] ?? c.defecto ?? '';
-const visible = c => (!c.paises || c.paises.includes(S.pais)) && (!c.opcionesPor || !!c.opcionesPor[S.pais]);
+const oculto = c => c.ocultoSi && Object.entries(c.ocultoSi).some(([k, v]) => S[k] === v);
+const visible = c => (!c.paises || c.paises.includes(S.pais)) && (!c.opcionesPor || !!c.opcionesPor[S.pais]) && !oculto(c);
 const opcionesDe = c => c.opcionesPor ? (c.opcionesPor[S.pais] || []).map(v => ({ v, es: v, en: v })) : c.clave === 'zona_horaria' && S.pais ? c.opciones.filter(o => o.p === S.pais) : c.opciones;
 const etiquetaOpcion = (c, v) => (opcionesDe(c).find(o => o.v === v) || {})[L] || v;
 const guardar = () => { try { localStorage.setItem(LLAVE, JSON.stringify(S)); } catch {} };
@@ -179,7 +211,7 @@ const errores = ids => camposDe(ids).filter(c => error(c));
 
 function control(c) {
   const v = val(c), id = `c-${c.clave}`, desc = `aria-describedby="a-${c.clave} m-${c.clave}"`;
-  if (c.clave === 'pais') return `<div class="paises" role="group" aria-labelledby="l-pais">${opcionesDe(c).map(o => `<button type="button" class="pais" data-k="pais" data-v="${o.v}" aria-pressed="${v === o.v}"><b>${esc(o[L])}</b><span>${esc(u('paisSub')[o.v])}</span></button>`).join('')}</div>`;
+  if (c.clave === 'pais') return `<div class="paises" role="group" aria-labelledby="l-pais">${opcionesDe(c).map(o => `<button type="button" class="pais" data-k="pais" data-v="${o.v}" aria-pressed="${v === o.v}"><i>${o.v}</i><b>${esc(o[L])}</b><span>${esc(u('paisSub')[o.v])}</span></button>`).join('')}</div>`;
   if (c.tipo === 'opcion') {
     const ops = opcionesDe(c);
     if (ops.length <= 4) return `<div class="opts" role="group" aria-labelledby="l-${c.clave}" ${desc}>${ops.map(o => `<button type="button" class="opt" data-k="${c.clave}" data-v="${o.v}" aria-pressed="${v === o.v}">${esc(o[L])}</button>`).join('')}</div>`;
@@ -195,6 +227,7 @@ function campoHtml(c) {
   return `<div class="campo${e ? ' err' : ''}" data-clave="${c.clave}"><span class="lbl" id="l-${c.clave}"><label for="c-${c.clave}">${esc(c.etiqueta[L])}</label><span class="req">${c.requerido ? u('req') : u('opt')}</span></span>${control(c)}<p class="ayuda" id="a-${c.clave}">${esc(ayuda)}</p><p class="msg" id="m-${c.clave}">${esc(e)}</p></div>`;
 }
 const avisoSalud = () => S.salud === 'si' && S.pais === 'US' ? u('bloqueo') : S.salud === 'si' && S.pais === 'MX' ? u('saludMx') : '';
+const avisoHtml = () => avisoSalud() ? `<div class="aviso" role="note">${esc(avisoSalud())}</div>` : '';
 
 function listaReqs() {
   const R = FORM.requisitos, p = S.pais; if (!R || !R[p]) return '';
@@ -204,20 +237,22 @@ function listaReqs() {
 const reglas = () => { const P = FORM.politicas; return `<div class="reglas">${(P[S.pais] || []).map(i => `<div><b>${esc(i.t[L])}</b><p>${esc(i.x[L])}</p></div>`).join('')}<p class="ayuda">${esc(P.nota[L])}</p></div>`; };
 function resumen() {
   const filas = ['pais', 'estado', 'ciudad', 'nombre', 'razon_social', 'giro', 'idioma', 'telefono_bot', 'dueno_nombre', 'dueno_telefono'].map(k => campos.find(c => c.clave === k)).filter(c => c && visible(c) && limpio(c) !== '');
-  return `<h2 class="paso">${esc(u('resumen'))}</h2><dl class="res">${filas.map(c => `<div><dt>${esc(c.etiqueta[L].replace(/\s*\(.*$/, ''))}</dt><dd>${esc(c.tipo === 'opcion' ? etiquetaOpcion(c, val(c)) : limpio(c))}</dd></div>`).join('')}</dl>`;
+  return `<dl class="res">${filas.map(c => `<div><dt>${esc(c.etiqueta[L].replace(/\s*\(.*$/, ''))}</dt><dd>${esc(c.tipo === 'opcion' ? etiquetaOpcion(c, val(c)) : limpio(c))}</dd></div>`).join('')}</dl>`;
 }
 function salida() {
   const d = {};
   for (const c of campos.filter(visible)) { const x = limpio(c); if (x !== '') d[c.clave] = c.tipo === 'entero' && /^\d+$/.test(x) ? Number(x) : x; }
+  if (S.giro === 'clinica') d.salud = 'si';
   return JSON.stringify({ _formulario: FORM.version, ...d }, null, 2);
 }
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10.5" stroke-width="1.8"/><path d="M7 12.5l3.5 3.5L17 9"/></svg>';
 
 function pintar() {
   document.documentElement.lang = L;
   document.querySelectorAll('.idioma button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.l === L)));
-  const n = PASOS.length, ultimo = paso === n - 1, clave = ['ubicacion', 'negocio', 'whatsapp', 'respuestas', 'politicas', 'revision'][paso];
-  $('#marca').textContent = u('marca');
-  $('#prog').innerHTML = PASOS.map((_, i) => `<i class="${i <= paso ? 'hecho' : ''}"></i>`).join('');
+  const n = PASOS.length, ultimo = paso === n - 1, clave = CLAVES_PASO[paso];
+  $('#marca').innerHTML = u('marca');
+  $('#fill').style.width = ((paso + 1) / n * 100) + '%';
   $('#paso').textContent = u('paso')(paso + 1, n);
   $('#h1').textContent = u('q')[clave][0]; $('#sub').textContent = u('q')[clave][1];
   $('#atras').textContent = u('atras'); $('#atras').hidden = paso === 0;
@@ -228,20 +263,24 @@ function pintar() {
     h = `<div class="campos">${camposDe([principal]).map(campoHtml).join('')}</div>`;
     if (extra) h += `<details${tocado && errores([extra]).length ? ' open' : ''}><summary>${esc(u('opcionales'))}</summary><div class="campos">${camposDe([extra]).map(campoHtml).join('')}</div></details>`;
     if (principal === 'politicas') h = reglas() + h;
-    if (principal === 'negocio' || principal === 'ubicacion') h += `<div class="aviso" id="aviso" ${avisoSalud() ? '' : 'hidden'}>${esc(avisoSalud())}</div>`;
+    if (principal === 'negocio') h += avisoHtml();
     if (principal === 'ubicacion' && S.pais) h += `<details><summary>${esc(FORM.requisitos.titulo[L])}</summary>${listaReqs()}</details>`;
   } else {
-    h = `<div class="aviso" ${avisoSalud() && S.pais === 'US' ? '' : 'hidden'}>${esc(avisoSalud())}</div>${resumen()}${listaReqs()}<div class="envio" ${msgCopia ? '' : 'hidden'}><p class="ok" role="status">${esc(msgCopia || '')}</p><textarea id="envio-x" readonly aria-label="${esc(u('copiar'))}">${esc(salida())}</textarea></div>`;
+    h = `${avisoSalud() && S.pais === 'US' ? avisoHtml() : ''}${resumen()}${listaReqs()}${msgCopia ? `<div class="envio"><div class="hecho" role="status">${CHECK}<span>${esc(msgCopia)}</span></div><textarea id="envio-x" readonly aria-label="${esc(u('copiar'))}">${esc(salida())}</textarea></div>` : ''}`;
   }
-  $('#app').innerHTML = h;
+  const app = $('#app'), q = $('#q');
+  app.innerHTML = h;
+  app.classList.toggle('anim', animar); q.classList.toggle('anim', animar);
+  animar = false;
 }
-const ir = n => { paso = n; tocado = false; msgCopia = null; pintar(); window.scrollTo({ top: 0 }); };
+const ir = n => { paso = n; tocado = false; msgCopia = null; animar = true; pintar(); window.scrollTo({ top: 0 }); };
 
 $('#app').addEventListener('click', e => {
   const b = e.target.closest('button[data-k]'); if (!b) return;
-  const k = b.dataset.k; S[k] = b.dataset.v;
+  const k = b.dataset.k, v = b.dataset.v;
   if (k === 'pais') { delete S.estado; delete S.zona_horaria; delete S._ok; }
-  guardar(); pintar();
+  if (k === 'giro') { if (v === 'clinica') S.salud = 'si'; else if (S.giro === 'clinica') delete S.salud; }
+  S[k] = v; guardar(); pintar();
 });
 $('#app').addEventListener('input', e => {
   const k = e.target.dataset.k; if (!k) return;
@@ -266,12 +305,10 @@ document.querySelector('.idioma').addEventListener('click', e => {
 $('#atras').addEventListener('click', () => ir(paso - 1));
 $('#sigue').addEventListener('click', async () => {
   if (paso < PASOS.length - 1) {
-    const fallas = errores(PASOS[paso]);
-    if (fallas.length) { tocado = true; pintar(); const p = $('.campo.err input, .campo.err textarea, .campo.err select, .campo.err button'); if (p) p.focus(); return; }
+    if (errores(PASOS[paso]).length) { tocado = true; pintar(); const p = $('.campo.err input, .campo.err textarea, .campo.err select, .campo.err button'); if (p) p.focus(); return; }
     return ir(paso + 1);
   }
-  const todas = errores(PASOS.flat());
-  if (todas.length) { const i = PASOS.findIndex(ids => errores(ids).length); tocado = true; paso = i; msgCopia = null; pintar(); return; }
+  if (errores(PASOS.flat()).length) { paso = PASOS.findIndex(ids => errores(ids).length); tocado = true; msgCopia = null; animar = true; pintar(); return; }
   const texto = salida(); let ok = false;
   try { await navigator.clipboard.writeText(texto); ok = true; } catch {}
   msgCopia = ok ? u('copiado') : u('manual'); pintar();
@@ -284,7 +321,7 @@ $('#intro').addEventListener('click', mostrarIdioma);
 $('#idioma').addEventListener('click', e => {
   const b = e.target.closest('.lang'); if (!b) return;
   L = b.dataset.l; try { localStorage.setItem(LLAVE_L, L); } catch {}
-  $('#idioma').hidden = true; $('.wrap').hidden = false; $('.barra').hidden = false; pintar(); window.scrollTo({ top: 0 });
+  $('#idioma').hidden = true; $('.wrap').hidden = false; $('.barra').hidden = false; animar = true; pintar(); window.scrollTo({ top: 0 });
 });
 pintar();
 </script>
