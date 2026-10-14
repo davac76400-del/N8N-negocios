@@ -1,0 +1,357 @@
+{
+ "version": 2,
+ "titulo": {
+  "es": "Alta de tu asistente de WhatsApp",
+  "en": "Set up your WhatsApp assistant"
+ },
+ "secciones": [
+  {
+   "id": "negocio",
+   "titulo": {
+    "es": "El negocio",
+    "en": "Your business"
+   },
+   "campos": [
+    {
+     "clave": "nombre",
+     "etiqueta": {
+      "es": "Nombre del negocio",
+      "en": "Business name"
+     },
+     "tipo": "texto",
+     "requerido": true
+    },
+    {
+     "clave": "giro",
+     "etiqueta": {
+      "es": "Tipo de negocio",
+      "en": "Type of business"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "hotel",
+       "es": "Hotel u hospedaje",
+       "en": "Hotel or lodging"
+      },
+      {
+       "v": "restaurante",
+       "es": "Restaurante",
+       "en": "Restaurant"
+      },
+      {
+       "v": "citas",
+       "es": "Negocio de citas (salón, barbería, taller, spa…)",
+       "en": "Appointment business (salon, barbershop, auto shop, spa…)"
+      }
+     ],
+     "ayuda": {
+      "es": "Define qué datos pide el asistente al reservar o agendar.",
+      "en": "This sets what the assistant asks for when someone books."
+     }
+    },
+    {
+     "clave": "pais",
+     "etiqueta": {
+      "es": "País del negocio",
+      "en": "Country"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "US",
+       "es": "Estados Unidos",
+       "en": "United States"
+      },
+      {
+       "v": "MX",
+       "es": "México",
+       "en": "Mexico"
+      },
+      {
+       "v": "OTRO",
+       "es": "Otro",
+       "en": "Other"
+      }
+     ],
+     "ayuda": {
+      "es": "Cambia el formato de fechas (3/4 = 4 de marzo en EE. UU.).",
+      "en": "Changes the date format (3/4 = March 4 in the US)."
+     }
+    },
+    {
+     "clave": "idioma",
+     "etiqueta": {
+      "es": "Idioma en el que escribes tus respuestas",
+      "en": "Language you write your answers in"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "es",
+       "es": "Español",
+       "en": "Spanish"
+      },
+      {
+       "v": "en",
+       "es": "Inglés",
+       "en": "English"
+      }
+     ],
+     "ayuda": {
+      "es": "El asistente contesta en el idioma del cliente y traduce tus respuestas si hace falta.",
+      "en": "The assistant replies in the customer's language and translates your answers if needed."
+     }
+    },
+    {
+     "clave": "salud",
+     "etiqueta": {
+      "es": "¿Atiendes pacientes o manejas información de salud?",
+      "en": "Do you treat patients or handle health information?"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "no",
+       "es": "No",
+       "en": "No"
+      },
+      {
+       "v": "si",
+       "es": "Sí (clínica, dentista, consultorio…)",
+       "en": "Yes (clinic, dentist, medical office…)"
+      }
+     ],
+     "ayuda": {
+      "es": "En Estados Unidos WhatsApp no se puede usar para información de salud. Si contestas Sí te proponemos otra vía.",
+      "en": "In the United States WhatsApp cannot be used for health information. If you answer Yes we will suggest another channel."
+     }
+    },
+    {
+     "clave": "ciudad",
+     "etiqueta": {
+      "es": "Ciudad",
+      "en": "City"
+     },
+     "tipo": "texto",
+     "requerido": false
+    },
+    {
+     "clave": "direccion",
+     "etiqueta": {
+      "es": "Dirección completa",
+      "en": "Full address"
+     },
+     "tipo": "texto",
+     "requerido": true
+    },
+    {
+     "clave": "zona_horaria",
+     "etiqueta": {
+      "es": "Zona horaria",
+      "en": "Time zone"
+     },
+     "tipo": "opcion",
+     "requerido": true,
+     "opciones": [
+      {
+       "v": "America/New_York",
+       "es": "Eastern (New York, Miami)",
+       "en": "Eastern (New York, Miami)"
+      },
+      {
+       "v": "America/Chicago",
+       "es": "Central (Chicago, Houston)",
+       "en": "Central (Chicago, Houston)"
+      },
+      {
+       "v": "America/Denver",
+       "es": "Mountain (Denver)",
+       "en": "Mountain (Denver)"
+      },
+      {
+       "v": "America/Phoenix",
+       "es": "Arizona (sin cambio de hora)",
+       "en": "Arizona (no daylight saving)"
+      },
+      {
+       "v": "America/Los_Angeles",
+       "es": "Pacific (Los Ángeles)",
+       "en": "Pacific (Los Angeles)"
+      },
+      {
+       "v": "America/Anchorage",
+       "es": "Alaska",
+       "en": "Alaska"
+      },
+      {
+       "v": "Pacific/Honolulu",
+       "es": "Hawái",
+       "en": "Hawaii"
+      },
+      {
+       "v": "America/Mexico_City",
+       "es": "Centro de México (CDMX, Oaxaca)",
+       "en": "Central Mexico (Mexico City, Oaxaca)"
+      },
+      {
+       "v": "America/Cancun",
+       "es": "Cancún",
+       "en": "Cancun"
+      },
+      {
+       "v": "America/Monterrey",
+       "es": "Monterrey",
+       "en": "Monterrey"
+      },
+      {
+       "v": "America/Tijuana",
+       "es": "Tijuana",
+       "en": "Tijuana"
+      },
+      {
+       "v": "America/Mazatlan",
+       "es": "Pacífico de México (Mazatlán)",
+       "en": "Mexican Pacific (Mazatlan)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "whatsapp",
+   "titulo": {
+    "es": "WhatsApp",
+    "en": "WhatsApp"
+   },
+   "campos": [
+    {
+     "clave": "telefono_bot",
+     "etiqueta": {
+      "es": "Número de WhatsApp del asistente (con lada de país, solo dígitos)",
+      "en": "WhatsApp number for the assistant (with country code, digits only)"
+     },
+     "tipo": "telefono",
+     "requerido": true,
+     "ayuda": {
+      "es": "Debe ser un número que NO esté activo en la app normal de WhatsApp.",
+      "en": "It must be a number that is NOT active in the regular WhatsApp app."
+     }
+    },
+    {
+     "clave": "dueno_nombre",
+     "etiqueta": {
+      "es": "Quién recibe los avisos",
+      "en": "Who receives the alerts"
+     },
+     "tipo": "texto",
+     "requerido": true
+    },
+    {
+     "clave": "dueno_telefono",
+     "etiqueta": {
+      "es": "WhatsApp de esa persona (con lada de país, solo dígitos)",
+      "en": "That person's WhatsApp (with country code, digits only)"
+     },
+     "tipo": "telefono",
+     "requerido": true
+    },
+    {
+     "clave": "dueno_correo",
+     "etiqueta": {
+      "es": "Correo de esa persona",
+      "en": "That person's email"
+     },
+     "tipo": "correo",
+     "requerido": false
+    }
+   ]
+  },
+  {
+   "id": "respuestas",
+   "titulo": {
+    "es": "Lo que el asistente puede contestar (texto real, sin inventar)",
+    "en": "What the assistant can answer (real text, nothing made up)"
+   },
+   "campos": [
+    {
+     "clave": "resp_tarifas",
+     "etiqueta": {
+      "es": "Tarifas y qué incluyen",
+      "en": "Prices and what is included"
+     },
+     "tipo": "largo",
+     "requerido": true
+    },
+    {
+     "clave": "resp_horarios",
+     "etiqueta": {
+      "es": "Horarios (atención, check-in/check-out, cocina…)",
+      "en": "Hours (opening, check-in/check-out, kitchen…)"
+     },
+     "tipo": "largo",
+     "requerido": true
+    },
+    {
+     "clave": "resp_ubicacion",
+     "etiqueta": {
+      "es": "Cómo llegar / ubicación",
+      "en": "How to get there / location"
+     },
+     "tipo": "largo",
+     "requerido": true
+    },
+    {
+     "clave": "resp_servicios",
+     "etiqueta": {
+      "es": "Servicios o menú (texto editable, no imagen)",
+      "en": "Services or menu (editable text, not an image)"
+     },
+     "tipo": "largo",
+     "requerido": false
+    },
+    {
+     "clave": "resp_politicas",
+     "etiqueta": {
+      "es": "Políticas (cancelación, mascotas, niños, pagos)",
+      "en": "Policies (cancellation, pets, children, payments)"
+     },
+     "tipo": "largo",
+     "requerido": false
+    }
+   ]
+  },
+  {
+   "id": "tono",
+   "titulo": {
+    "es": "Tono",
+    "en": "Tone"
+   },
+   "campos": [
+    {
+     "clave": "saludo",
+     "etiqueta": {
+      "es": "Cómo saluda el asistente (usa {nombre} para tu negocio)",
+      "en": "How the assistant greets (use {nombre} for your business)"
+     },
+     "tipo": "largo",
+     "requerido": false
+    },
+    {
+     "clave": "pausa_min",
+     "etiqueta": {
+      "es": "Minutos que el asistente calla cuando entra una persona",
+      "en": "Minutes the assistant stays quiet when a person steps in"
+     },
+     "tipo": "entero",
+     "requerido": false,
+     "defecto": 30
+    }
+   ]
+  }
+ ]
+}

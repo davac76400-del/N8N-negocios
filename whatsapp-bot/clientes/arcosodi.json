@@ -1,0 +1,21 @@
+{
+  "nombre": "ArcoSodi Hotel Boutique",
+  "giro": "hotel",
+  "ciudad": "Oaxaca de Juárez",
+  "direccion": "C. de Mariano Abasolo 514, Centro, 68000 Oaxaca de Juárez, Oax., México",
+  "zona_horaria": "America/Mexico_City",
+  "telefono_bot": "VERIFICAR",
+  "dueno_nombre": "VERIFICAR",
+  "dueno_telefono": "529511607980",
+  "dueno_correo": "reservaciones@arcosodi.com",
+  "resp_tarifas": "Tarifas por noche, desayuno incluido: Lili, Jazmín y Lavanda $3,400 MXN; Girasol, Tulipán, Plúmbago, Perla y Zafiro $4,200 MXN; suites Oro y Diamante (con tina de hidromasaje) $5,900 MXN. Todas para 2 personas.",
+  "resp_horarios": "VERIFICAR: horario de check-in y check-out y horario de atención.",
+  "resp_ubicacion": "Estamos en C. de Mariano Abasolo 514, Centro, 68000 Oaxaca de Juárez, a unas cuadras de Santo Domingo. Mapa: https://www.google.com/maps/search/?api=1&query=C.+de+Mariano+Abasolo+514+Oaxaca",
+  "resp_servicios": "Diez habitaciones únicas en una casona de más de 300 años, patio con arcos, jardín con bar, desayuno incluido, Wi-Fi y estacionamiento.",
+  "resp_politicas": "",
+  "saludo": "Hola, gracias por escribir a ArcoSodi Hotel Boutique.",
+  "pausa_min": 30,
+  "pais": "MX",
+  "idioma": "es",
+  "salud": "no"
+}

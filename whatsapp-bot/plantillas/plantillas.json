@@ -1,0 +1,122 @@
+[
+  {
+    "name": "aviso_escalamiento",
+    "language": "es_MX",
+    "category": "UTILITY",
+    "components": [
+      {
+        "type": "BODY",
+        "text": "Atención: {{1}} ({{2}}) necesita hablar con una persona. Motivo: {{3}}. El bot dejó de responder en ese chat por un rato.",
+        "example": {
+          "body_text": [
+            [
+              "Ana López",
+              "5219510000000",
+              "Pidió hablar con una persona"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "nueva_solicitud_reserva",
+    "language": "es_MX",
+    "category": "UTILITY",
+    "components": [
+      {
+        "type": "BODY",
+        "text": "Nueva solicitud de reserva, folio {{1}}, a nombre de {{2}}. Datos: {{3}}. Confírmala o respóndele al cliente desde su chat.",
+        "example": {
+          "body_text": [
+            [
+              "A1B2C3",
+              "Ana López",
+              "2026-11-20 a 2026-11-23 · 2 personas"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "confirmacion_reserva",
+    "language": "es_MX",
+    "category": "UTILITY",
+    "components": [
+      {
+        "type": "BODY",
+        "text": "Hola {{1}}, tu reserva con folio {{2}} quedó confirmada para {{3}}. Si necesitas cambiar algo, responde a este mensaje.",
+        "example": {
+          "body_text": [
+            [
+              "Ana",
+              "A1B2C3",
+              "20 al 23 de noviembre"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "aviso_escalamiento_en",
+    "language": "en_US",
+    "category": "UTILITY",
+    "components": [
+      {
+        "type": "BODY",
+        "text": "Attention: {{1}} ({{2}}) needs to talk to a person. Reason: {{3}}. The bot stopped replying in that chat for a while.",
+        "example": {
+          "body_text": [
+            [
+              "Ana Lopez",
+              "15551234567",
+              "Asked to talk to a person"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "nueva_solicitud_reserva_en",
+    "language": "en_US",
+    "category": "UTILITY",
+    "components": [
+      {
+        "type": "BODY",
+        "text": "New booking request, reference {{1}}, under the name {{2}}. Details: {{3}}. Please confirm it or reply to the customer in their chat.",
+        "example": {
+          "body_text": [
+            [
+              "A1B2C3",
+              "Ana Lopez",
+              "2026-11-20 to 2026-11-23 · 2"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "confirmacion_reserva_en",
+    "language": "en_US",
+    "category": "UTILITY",
+    "components": [
+      {
+        "type": "BODY",
+        "text": "Hi {{1}}, your booking with reference {{2}} is confirmed for {{3}}. If you need to change anything, just reply to this message.",
+        "example": {
+          "body_text": [
+            [
+              "Ana",
+              "A1B2C3",
+              "Nov 20 to Nov 23"
+            ]
+          ]
+        }
+      }
+    ]
+  }
+]
