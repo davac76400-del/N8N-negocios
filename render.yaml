@@ -1,0 +1,38 @@
+# Blueprint de Render: Evolution API v2 + Postgres.
+# Evolution v2 exige base de datos; sin ella no arranca.
+services:
+  - type: web
+    name: evolution-api
+    runtime: image
+    image:
+      url: docker.io/atendai/evolution-api:v2.1.1
+    plan: starter # free se duerme y desconecta WhatsApp; starter cuesta ~7 USD/mes
+    healthCheckPath: /
+    envVars:
+      - key: SERVER_PORT
+        value: "8080"
+      - key: AUTHENTICATION_API_KEY
+        sync: false # se escribe en el panel de Render, no en el repo
+      - key: SERVER_URL
+        sync: false # URL pública del servicio, p. ej. https://evolution-api-xxxx.onrender.com
+      - key: DATABASE_PROVIDER
+        value: postgresql
+      - key: DATABASE_CONNECTION_URI
+        fromDatabase:
+          name: evolution-db
+          property: connectionString
+      - key: DATABASE_SAVE_DATA_INSTANCE
+        value: "true"
+      - key: DATABASE_SAVE_DATA_NEW_MESSAGE
+        value: "true"
+      - key: CACHE_REDIS_ENABLED
+        value: "false"
+      - key: CACHE_LOCAL_ENABLED
+        value: "true"
+      - key: WEBHOOK_GLOBAL_ENABLED
+        value: "false" # el webhook se define por instancia
+
+databases:
+  - name: evolution-db
+    plan: free # Render borra el plan free a los 30 días; sube de plan antes
+    databaseName: evolution
