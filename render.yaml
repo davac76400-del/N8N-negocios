@@ -1,5 +1,5 @@
-# Blueprint de Render: Evolution API v2 + Postgres.
-# Evolution v2 exige base de datos; sin ella no arranca.
+# Blueprint de Render: Evolution API v2.
+# Evolution v2 exige base de datos: aquí se usa la de Supabase (sin base propia en Render).
 services:
   - type: web
     name: evolution-api
@@ -14,13 +14,11 @@ services:
       - key: AUTHENTICATION_API_KEY
         sync: false # se escribe en el panel de Render, no en el repo
       - key: SERVER_URL
-        sync: false # URL pública del servicio, p. ej. https://evolution-api-xxxx.onrender.com
+        value: https://evolution-api-agjw.onrender.com
       - key: DATABASE_PROVIDER
         value: postgresql
       - key: DATABASE_CONNECTION_URI
-        fromDatabase:
-          name: evolution-db
-          property: connectionString
+        sync: false # URI del Session pooler de Supabase + ?schema=evolution_api (se pega en el panel)
       - key: DATABASE_SAVE_DATA_INSTANCE
         value: "true"
       - key: DATABASE_SAVE_DATA_NEW_MESSAGE
@@ -32,7 +30,3 @@ services:
       - key: WEBHOOK_GLOBAL_ENABLED
         value: "false" # el webhook se define por instancia
 
-databases:
-  - name: evolution-db
-    plan: free # Render borra el plan free a los 30 días; sube de plan antes
-    databaseName: evolution
