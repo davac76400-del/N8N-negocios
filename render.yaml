@@ -27,6 +27,14 @@ services:
         value: "false"
       - key: CACHE_LOCAL_ENABLED
         value: "true"
+      - key: QRCODE_LIMIT
+        value: "30"
+      - key: CONFIG_SESSION_PHONE_CLIENT
+        value: Aura
+      - key: CONFIG_SESSION_PHONE_NAME
+        value: Chrome
+      - key: LOG_LEVEL
+        value: ERROR,WARN,INFO,LOG,DEBUG # DEBUG temporal para ver por qué Baileys no emite el QR
       - key: WEBHOOK_GLOBAL_ENABLED
         value: "false" # el webhook se define por instancia
 
