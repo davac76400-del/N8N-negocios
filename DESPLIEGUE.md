@@ -37,10 +37,13 @@ console.groq.com → crea cuenta → *API Keys* → *Create API Key* → copia l
 
 ## 4. Render (≈ 10 min)
 
+> Puedes desplegar **antes** de tener Meta: `WA_*` son opcionales al arrancar. Sin ellas, el formulario y el panel funcionan y el webhook responde 503 hasta que las pongas. Cuando tengas Meta, agrégalas en *Environment* y Render redespliega.
+
 1. render.com → crea cuenta con GitHub.
 2. *New → Blueprint* → elige el repo `N8N-negocios` y la rama `claude/bots-whatsapp-ecosistema` (o `main` cuando la fusiones). Render lee `render.yaml`.
 3. Te pide las variables secretas. **Llénalas todas**, si falta una el servicio no arranca (el log dice cuál):
-   - `DATABASE_URL`, `ADMIN_PASSWORD` (12+ caracteres), `WA_VERIFY_TOKEN`, `WA_APP_SECRET`, `WA_ACCESS_TOKEN`, `LLM_API_KEY`.
+   - Obligatorias: `DATABASE_URL`, `ADMIN_PASSWORD` (12+ caracteres), `LLM_API_KEY`.
+   - Después, cuando tengas Meta: `WA_VERIFY_TOKEN`, `WA_APP_SECRET`, `WA_ACCESS_TOKEN`.
 4. Espera el primer despliegue. Tu URL será `https://bots-whatsapp-xxxx.onrender.com`. Comprueba: abre `/health` → `{"ok":true}`.
 
 ## 5. Conectar el webhook en Meta

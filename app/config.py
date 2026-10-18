@@ -27,10 +27,9 @@ PAUSA_MINUTOS = int(_e("PAUSA_MINUTOS", "30"))
 MAX_MSGS_HORA = int(_e("MAX_MSGS_HORA", "30"))
 HISTORIAL = int(_e("HISTORIAL", "10"))  # pocos mensajes: los planes gratuitos limitan tokens por minuto
 
-OBLIGATORIAS = (
-    "DATABASE_URL", "ADMIN_PASSWORD", "WA_VERIFY_TOKEN",
-    "WA_APP_SECRET", "WA_ACCESS_TOKEN", "LLM_API_KEY",
-)
+# Las de WhatsApp no son obligatorias: sin ellas el formulario y el panel funcionan,
+# y el webhook responde 503 hasta que Meta esté configurado.
+OBLIGATORIAS = ("DATABASE_URL", "ADMIN_PASSWORD", "LLM_API_KEY")
 
 
 def validar() -> None:

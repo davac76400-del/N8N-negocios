@@ -169,6 +169,8 @@ app.include_router(admin)
 @app.get("/webhook/whatsapp", include_in_schema=False)
 async def wa_verificar(request: Request):
     q = request.query_params
+    if not config.WA_VERIFY_TOKEN:
+        raise HTTPException(503, "WhatsApp no está configurado")
     token_ok = secrets.compare_digest(q.get("hub.verify_token", "").encode(), config.WA_VERIFY_TOKEN.encode())
     if q.get("hub.mode") == "subscribe" and token_ok:
         return PlainTextResponse(q.get("hub.challenge", ""))
@@ -177,6 +179,8 @@ async def wa_verificar(request: Request):
 
 @app.post("/webhook/whatsapp", include_in_schema=False)
 async def wa_recibir(request: Request, tareas: BackgroundTasks):
+    if not config.WA_APP_SECRET:
+        raise HTTPException(503, "WhatsApp no está configurado")
     cuerpo = await request.body()
     if not whatsapp.firma_valida(cuerpo, request.headers.get("x-hub-signature-256")):
         raise HTTPException(403)
