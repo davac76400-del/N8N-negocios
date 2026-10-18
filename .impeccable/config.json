@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-10-18T14:50:28.279Z",
         "reason": "assistant: falso positivo; el detector no resuelve /static/style.css (ruta servida, en disco es web/style.css) y ve todo a 16px; con el CSS resuelto el escaneo sale limpio"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "web/aviso.html"
+        ],
+        "createdAt": "2026-10-18T19:16:40.270Z",
+        "reason": "assistant: falso positivo; el detector no resuelve /static/style.css. Con el CSS resuelto en una copia el escaneo sale limpio (h1 2.25rem, h2 1.25rem, cuerpo 1rem)"
       }
     ]
   }
