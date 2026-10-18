@@ -44,9 +44,13 @@ class Solicitud(_Base):
     directrices: str = Field("", max_length=1000)
     # Honeypot anti-bots: un humano nunca lo llena.
     website: str = Field("", max_length=200)
+    # Consentimiento: no se envía la solicitud sin aceptar el aviso de privacidad.
+    aviso_privacidad: bool = False
 
     @model_validator(mode="after")
     def _algun_contacto(self):
         if not (self.contacto_email or self.contacto_telefono):
             raise ValueError("indica un correo o un teléfono de contacto")
+        if not self.aviso_privacidad:
+            raise ValueError("debes aceptar el aviso de privacidad")
         return self

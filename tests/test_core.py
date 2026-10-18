@@ -82,12 +82,14 @@ def test_historial_empieza_con_usuario():
 
 
 def test_solicitud_exige_contacto_y_catalogo():
-    base = {**DATOS, "contacto_nombre": "Beto", "catalogo": [{"nombre": "x"}]}
+    base = {**DATOS, "contacto_nombre": "Beto", "catalogo": [{"nombre": "x"}], "aviso_privacidad": True}
     base.pop("faqs")
     with pytest.raises(ValueError, match="contacto"):
         Solicitud(**base)
     Solicitud(**base, contacto_telefono="9510000000")
     with pytest.raises(ValueError):
         Solicitud(**{**base, "catalogo": [], "contacto_telefono": "9510000000"})
+    with pytest.raises(ValueError, match="aviso de privacidad"):  # sin consentimiento no hay solicitud
+        Solicitud(**{**base, "aviso_privacidad": False, "contacto_telefono": "9510000000"})
     with pytest.raises(ValueError):  # campos desconocidos no pasan
         Solicitud(**base, contacto_telefono="9510000000", extra="x")

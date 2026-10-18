@@ -67,6 +67,11 @@ async def formulario():
     return FileResponse(WEB / "index.html")
 
 
+@app.get("/aviso-de-privacidad", include_in_schema=False)
+async def aviso_privacidad():
+    return FileResponse(WEB / "aviso.html")
+
+
 @app.post("/api/solicitudes", status_code=201)
 async def crear_solicitud(s: Solicitud):
     if s.website:  # honeypot: se responde "ok" para no dar pistas al bot
@@ -99,6 +104,10 @@ class Rechazo(BaseModel):
 
 class Numero(BaseModel):
     wa_phone_number_id: str | None = Field(None, pattern=r"^\d{5,25}$")  # null = apagar el bot
+
+
+class Activo(BaseModel):
+    activo: bool
 
 
 @admin.get("", include_in_schema=False)
@@ -142,6 +151,13 @@ async def listar_clientes():
 @admin.put("/api/clientes/{cid}/numero")
 async def asignar_numero(cid: UUID, cuerpo: Numero):
     await db.asignar_numero(cid, cuerpo.wa_phone_number_id)
+    return {"ok": True}
+
+
+@admin.put("/api/clientes/{cid}/activo")
+async def activar_bot(cid: UUID, cuerpo: Activo):
+    """Pausa o reactiva el bot. Úsalo para suspender por falta de pago."""
+    await db.set_activo(cid, cuerpo.activo)
     return {"ok": True}
 
 

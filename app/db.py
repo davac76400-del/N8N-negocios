@@ -93,7 +93,7 @@ async def rechazar(sid, motivo: str) -> None:
 
 async def listar_clientes():
     return await pool.fetch(
-        """select c.id, c.nombre, c.sector, c.wa_phone_number_id, c.creado_en,
+        """select c.id, c.nombre, c.sector, c.wa_phone_number_id, c.creado_en, c.activo,
                   (select count(*) from mensajes m where m.cliente_id = c.id) as mensajes
            from clientes c order by c.creado_en desc""")
 
@@ -107,11 +107,17 @@ async def asignar_numero(cid, numero: str | None) -> None:
         raise NoEncontrado
 
 
+async def set_activo(cid, activo: bool) -> None:
+    ok = await pool.fetchval("update clientes set activo = $2 where id = $1 returning id", cid, activo)
+    if ok is None:
+        raise NoEncontrado
+
+
 # --- conversaciones (bot) -----------------------------------------------------------------
 
 async def cliente_por_numero(phone_number_id: str):
     return await pool.fetchrow(
-        "select id, nombre, prompt_sistema from clientes where wa_phone_number_id = $1", phone_number_id)
+        "select id, nombre, prompt_sistema, activo from clientes where wa_phone_number_id = $1", phone_number_id)
 
 
 async def conversacion(cliente_id, telefono: str, nombre: str | None):

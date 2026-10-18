@@ -60,6 +60,7 @@ function recolectar() {
     restricciones: texto('restricciones'), directrices: texto('directrices'),
     contacto_nombre: texto('contacto_nombre'), contacto_email: o('contacto_email'),
     contacto_telefono: o('contacto_telefono'), website: texto('website'),
+    aviso_privacidad: $('#aviso_privacidad').checked,
   };
 }
 
@@ -77,6 +78,7 @@ const ETIQUETAS = {
 
 function errores(detail) {
   if (!Array.isArray(detail)) return 'No pudimos guardar tu solicitud. Intenta de nuevo.';
+  if (detail.some((d) => /aviso/.test(d.msg))) return 'Acepta el aviso de privacidad para enviar tu solicitud.';
   const campos = new Set(detail.map((d) => ETIQUETAS[d.loc[1]] || d.loc[1] || 'Solicitud'));
   const sinContacto = detail.some((d) => /contacto/.test(d.msg));
   return 'Revisa: ' + [...campos].join(', ') + (sinContacto ? '. Indica un correo o un teléfono.' : '. Faltan datos o hay textos demasiado cortos o largos.');

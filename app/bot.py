@@ -126,6 +126,8 @@ async def _procesar(m: dict) -> None:
     if cliente is None:
         log.warning("mensaje para un número sin bot activo: %s", m["phone_number_id"])
         return
+    if not cliente["activo"]:
+        return  # mensualidad vencida: el bot calla hasta que se reactive desde el panel
     cid, tel = cliente["id"], m["wa_id"]
 
     async with _locks[(cid, tel)]:

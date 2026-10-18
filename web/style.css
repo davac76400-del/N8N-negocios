@@ -19,6 +19,8 @@ fieldset { background: var(--superficie); border: 1px solid var(--borde); border
 legend { font-size: 1.2rem; font-weight: 600; padding: 0 8px; }
 label { display: block; font-weight: 500; margin: 12px 0 4px; }
 .ayuda { color: var(--suave); font-size: .875rem; font-weight: 400; }
+.casilla { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; margin: 0; }
+.casilla input { width: auto; margin-top: 4px; }
 input, textarea, select { width: 100%; padding: 10px 12px; font: inherit; color: inherit; background: var(--fondo); border: 1px solid var(--borde); border-radius: 8px; }
 textarea { min-height: 84px; resize: vertical; }
 input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--primario); outline-offset: 2px; }

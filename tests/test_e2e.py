@@ -23,7 +23,7 @@ SECRETO = "secreto-de-app"
 
 SOLICITUD = {
     "contacto_nombre": "Beto", "contacto_telefono": "9510000000", "negocio": "Tacos Don Beto", "sector": "Restaurante",
-    "horarios": "Lun-Sáb 9 a 20 h", "tono": "Cercano y amable",
+    "aviso_privacidad": True, "horarios": "Lun-Sáb 9 a 20 h", "tono": "Cercano y amable",
     "catalogo": [{"nombre": "Taco al pastor", "precio": 25, "categoria": "Tacos"}],
     "faqs": [{"pregunta": "¿Aceptan tarjeta?", "respuesta": "Sí."}],
 }
@@ -52,6 +52,7 @@ def web():
         "alter default privileges in schema public grant all on tables to anon, authenticated",
         (DB / "001_down.sql").read_text(), (DB / "001_esquema.sql").read_text(),
         (DB / "001_esquema.sql").read_text(),  # idempotente: correrlo dos veces no rompe
+        (DB / "002_mensualidad.sql").read_text(),
     ))
     from app import bot, config, whatsapp
     from app.main import app
@@ -102,6 +103,8 @@ def test_health_y_formulario(web):
 
 def test_formulario_valida_y_guarda(web):
     assert web.post("/api/solicitudes", json={**SOLICITUD, "catalogo": []}).status_code == 422
+    assert web.post("/api/solicitudes", json={**SOLICITUD, "aviso_privacidad": False}).status_code == 422  # sin aviso, no se guarda
+    assert web.get("/aviso-de-privacidad").status_code == 200
     sin_contacto = {k: v for k, v in SOLICITUD.items() if k != "contacto_telefono"}
     assert web.post("/api/solicitudes", json=sin_contacto).status_code == 422
     # honeypot: parece éxito pero no guarda
@@ -224,6 +227,17 @@ def test_tope_de_mensajes_por_hora_protege_el_gasto(web):
     for i in range(4):
         wa(web, f"spam {i}", wa_id="5219510000006")
     assert len(respuestas()) == n + 2
+
+
+def test_cliente_pausado_no_responde_y_se_reactiva(web):
+    cid = estado["cliente1"]
+    assert web.put(f"/admin/api/clientes/{cid}/activo", json={"activo": False}, auth=AUTH).status_code == 200
+    n = len(respuestas())
+    wa(web, "hola, ¿sigues ahí?", wa_id="5219510000007")
+    assert len(respuestas()) == n  # mensualidad vencida: el bot calla
+    assert web.put(f"/admin/api/clientes/{cid}/activo", json={"activo": True}, auth=AUTH).status_code == 200
+    wa(web, "ya pagué", wa_id="5219510000007")
+    assert len(respuestas()) == n + 1
 
 
 def test_anon_de_supabase_no_lee_nada():

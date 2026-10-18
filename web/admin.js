@@ -101,14 +101,20 @@ async function vistaClientes() {
   const filas = await api('/clientes');
   $('#vista').replaceChildren(filas.length ? h('div', {}, filas.map((c) => {
     const num = h('input', { value: c.wa_phone_number_id ?? '', inputmode: 'numeric', 'aria-label': 'Phone number ID', placeholder: 'Sin número = bot apagado' });
+    const [clase, texto] = !c.activo ? ['pendiente', 'mensualidad pausada']
+      : c.wa_phone_number_id ? ['aprobada', 'bot activo'] : ['pendiente', 'sin número'];
     return h('div', { class: 'tarjeta' },
-      h('h2', {}, c.nombre, ' ', h('span', { class: 'insignia ' + (c.wa_phone_number_id ? 'aprobada' : 'pendiente') }, c.wa_phone_number_id ? 'bot activo' : 'sin número')),
+      h('h2', {}, c.nombre, ' ', h('span', { class: 'insignia ' + clase }, texto)),
       h('p', { class: 'ayuda' }, `${c.sector} · ${c.mensajes} mensajes · creado ${fecha(c.creado_en)}`),
       h('div', { class: 'acciones' }, h('div', {}, num),
         h('button', { type: 'button', class: 'primario', onclick: () => accion(async () => {
           await api(`/clientes/${c.id}/numero`, { method: 'PUT', body: { wa_phone_number_id: num.value.trim() || null } });
           aviso(num.value.trim() ? 'Número vinculado: el bot ya responde.' : 'Bot apagado.'); vistaClientes();
-        }) }, 'Guardar')));
+        }) }, 'Guardar'),
+        h('button', { type: 'button', class: c.activo ? 'peligro' : 'primario', onclick: () => accion(async () => {
+          await api(`/clientes/${c.id}/activo`, { method: 'PUT', body: { activo: !c.activo } });
+          aviso(c.activo ? 'Bot pausado: no responderá hasta reactivarlo.' : 'Bot reactivado.'); vistaClientes();
+        }) }, c.activo ? 'Pausar (sin pago)' : 'Reactivar')));
   })) : h('p', { class: 'ayuda' }, 'Aún no hay clientes aprobados.'));
 }
 
