@@ -8,6 +8,7 @@ os.environ.update({
     "WA_VERIFY_TOKEN": "token-verificacion",
     "WA_APP_SECRET": "secreto-de-app",
     "WA_ACCESS_TOKEN": "token-wa",
-    "ANTHROPIC_API_KEY": "sk-ant-prueba",
+    "LLM_API_KEY": "gsk-prueba",
+    "LLM_BASE_URL": "http://llm.test/v1",
     "EVENTS_WEBHOOK_URL": "",
 })

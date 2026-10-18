@@ -2,16 +2,19 @@
 
 El "bot" de cada negocio es su prompt_sistema (generado al aprobar). El estado vive en Postgres,
 así que reiniciar el contenedor no pierde conversaciones.
+
+El LLM se llama por la API estándar "chat/completions" (OpenAI-compatible): Groq por defecto (gratis),
+pero sirve cualquier proveedor compatible cambiando LLM_BASE_URL, LLM_MODEL y LLM_API_KEY.
 """
 import asyncio
+import json
 import logging
 import re
 from collections import defaultdict
 from datetime import datetime, timezone
-from functools import cache
 from zoneinfo import ZoneInfo
 
-import anthropic
+import httpx
 
 from . import config, db, events, whatsapp
 
@@ -33,69 +36,80 @@ FALLO_IA = "Tuve un problema técnico para responderte. Ya avisé a una persona 
 SIN_RESPUESTA = "Disculpa, no logré entenderte. ¿Me lo puedes explicar de otra forma?"
 SOLO_TEXTO = "Por ahora solo puedo leer mensajes de texto. ¿Me lo escribes, por favor?"
 
-# Modelos que aceptan el parámetro server-side `fallbacks` (si un clasificador de seguridad
-# rechaza una petición legítima, se reintenta en otro modelo en vez de devolver el rechazo).
-FALLBACK_MODELS = {"claude-opus-5-5", "claude-opus-5", "claude-sonnet-5-5", "claude-fable-5-1"}
-
 PASAR_A_HUMANO = {
-    "name": "pasar_a_humano",
-    "description": ("Transfiere la conversación a una persona del equipo y silencia al bot. Úsala para quejas, "
-                    "temas sensibles, cuando el cliente pida un humano o cuando un pedido/reserva esté listo "
-                    "para que el equipo lo confirme."),
-    "input_schema": {
-        "type": "object",
-        "properties": {
-            "motivo": {"type": "string", "description": "Motivo en una frase corta."},
-            "resumen": {"type": "string", "description": (
-                "Resumen para el equipo: qué quiere el cliente y los datos reunidos "
-                "(productos, cantidades, nombre, dirección, fecha).")},
+    "type": "function",
+    "function": {
+        "name": "pasar_a_humano",
+        "description": ("Transfiere la conversación a una persona del equipo y silencia al bot. Úsala para quejas, "
+                        "temas sensibles, cuando el cliente pida un humano o cuando un pedido/reserva esté listo "
+                        "para que el equipo lo confirme."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "motivo": {"type": "string", "description": "Motivo en una frase corta."},
+                "resumen": {"type": "string", "description": (
+                    "Resumen para el equipo: qué quiere el cliente y los datos reunidos "
+                    "(productos, cantidades, nombre, dirección, fecha).")},
+            },
+            "required": ["motivo", "resumen"],
         },
-        "required": ["motivo", "resumen"],
     },
 }
 
 
-@cache
-def _cliente_llm() -> anthropic.AsyncAnthropic:
-    return anthropic.AsyncAnthropic(timeout=45.0, max_retries=2)
-
-
 def _a_mensajes(filas) -> list[dict]:
     msgs = [{"role": "user" if f["direccion"] == "in" else "assistant", "content": f["contenido"]} for f in filas]
-    while msgs and msgs[0]["role"] == "assistant":  # la API exige empezar con un turno de usuario
+    while msgs and msgs[0]["role"] == "assistant":  # el historial debe empezar con un turno de usuario
         msgs.pop(0)
     return msgs
+
+
+async def _llamar_llm(cuerpo: dict) -> dict:
+    """POST a chat/completions con dos tolerancias de los planes gratuitos:
+    429 (límite por minuto) -> espera lo que indique el proveedor y reintenta;
+    400 con herramientas (los Llama a veces generan una llamada mal formada) -> reintenta sin herramientas."""
+    cabeceras = {"Authorization": f"Bearer {config.LLM_API_KEY}"}
+    async with httpx.AsyncClient(timeout=30) as http:
+        for intento in range(3):
+            r = await http.post(f"{config.LLM_BASE_URL}/chat/completions", json=cuerpo, headers=cabeceras)
+            if r.status_code == 429 and intento < 2:
+                try:
+                    espera = float(r.headers.get("retry-after") or 5)
+                except ValueError:
+                    espera = 5
+                await asyncio.sleep(min(espera, 20))
+                continue
+            if r.status_code == 400 and "tools" in cuerpo:
+                cuerpo = {k: v for k, v in cuerpo.items() if k not in ("tools", "tool_choice")}
+                continue
+            r.raise_for_status()
+            return r.json()
+    raise RuntimeError("el proveedor de IA no respondió")
 
 
 async def pedir_respuesta(prompt_negocio: str, historial: list[dict]) -> tuple[str, dict | None]:
     """Devuelve (texto para el cliente, datos de escalación o None)."""
     ahora = datetime.now(ZoneInfo(config.ZONA_HORARIA))
-    kw = dict(
-        model=config.CLAUDE_MODEL,
-        max_tokens=1500,
-        output_config={"effort": "low"},  # chat corto: baja latencia y costo
-        # El prompt del negocio va primero y cacheado; la hora (volátil) va después del breakpoint.
-        system=[
-            {"type": "text", "text": prompt_negocio, "cache_control": {"type": "ephemeral"}},
-            {"type": "text", "text": f"Fecha y hora actual del negocio: {DIAS[ahora.weekday()]} "
-                                     f"{ahora:%d/%m/%Y %H:%M} ({config.ZONA_HORARIA})."},
-        ],
-        tools=[PASAR_A_HUMANO],
-        messages=historial,
-    )
-    c = _cliente_llm()
-    if config.CLAUDE_MODEL in FALLBACK_MODELS:
-        r = await c.beta.messages.create(betas=["server-side-fallback-2026-07-01"], fallbacks="default", **kw)
-    else:
-        r = await c.messages.create(**kw)
-
-    if r.stop_reason == "refusal":
-        return "", {"motivo": "El modelo declinó responder", "resumen": historial[-1]["content"]}
-    texto = "".join(b.text for b in r.content if b.type == "text").strip()
-    for b in r.content:
-        if b.type == "tool_use" and b.name == "pasar_a_humano":
-            return texto, {"motivo": str(b.input.get("motivo", ""))[:500],
-                           "resumen": str(b.input.get("resumen", ""))[:2000]}
+    sistema = (f"{prompt_negocio}\n\nFecha y hora actual del negocio: {DIAS[ahora.weekday()]} "
+               f"{ahora:%d/%m/%Y %H:%M} ({config.ZONA_HORARIA}).")
+    r = await _llamar_llm({
+        "model": config.LLM_MODEL,
+        "max_tokens": 600,
+        "temperature": 0.3,
+        "messages": [{"role": "system", "content": sistema}, *historial],
+        "tools": [PASAR_A_HUMANO],
+        "tool_choice": "auto",
+    })
+    msg = r["choices"][0]["message"]
+    texto = (msg.get("content") or "").strip()
+    for llamada in msg.get("tool_calls") or []:
+        if llamada.get("function", {}).get("name") == "pasar_a_humano":
+            try:
+                args = json.loads(llamada["function"].get("arguments") or "{}")
+            except ValueError:
+                args = {}
+            return texto, {"motivo": str(args.get("motivo") or "Solicitud del cliente")[:500],
+                           "resumen": str(args.get("resumen") or historial[-1]["content"])[:2000]}
     return texto, None
 
 

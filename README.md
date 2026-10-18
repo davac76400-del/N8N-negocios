@@ -13,7 +13,7 @@ Tú ──► Panel (/admin): revisas ──► [Aprobar] ─ una transacción �
 Cliente final ──► WhatsApp ──► Meta Cloud API ──► POST /webhook/whatsapp (firma HMAC)
                                                       │ responde 200 al instante
                                                       ▼
-                          bot: ¿pausado? ¿duplicado? ¿tema sensible? ──► Claude (prompt del negocio)
+                          bot: ¿pausado? ¿duplicado? ¿tema sensible? ──► LLM (prompt del negocio)
                                                       │                        │ tool: pasar_a_humano
                                                       ▼                        ▼
                                   Meta Cloud API (respuesta)        pausa 30 min + alerta + panel
@@ -24,11 +24,11 @@ Cliente final ──► WhatsApp ──► Meta Cloud API ──► POST /webhoo
 | Pieza | Elección | Razón |
 |---|---|---|
 | WhatsApp | **API oficial de Meta (Cloud API)** | No tiene sesiones: ni QR, ni socket, ni archivos de sesión que se pierdan en un contenedor efímero. Solo token + webhook firmado. Sin riesgo de baneo por automatizar WhatsApp Web. |
-| Backend | **Python + FastAPI**, un solo servicio | Formulario, panel, webhook y bot en un proceso: un único punto a monitorear. Validación con pydantic. |
-| Base de datos | **Supabase Postgres** (conexión directa con asyncpg) | Persistencia real y respaldos gestionados. RLS activo como segunda barrera. Todo el estado vive aquí: el servidor es desechable. |
-| IA | **Claude** (`pasar_a_humano` como herramienta, prompt cacheado) | El prompt del negocio se cachea; el modelo decide cuándo escalar. |
-| HTTPS | **Caddy** | Certificados Let's Encrypt automáticos y renovados solos. |
-| Hosting | **Docker en un VPS** (sirve cualquier host Docker) | Contenedor sin estado: si se reinicia, no se pierde nada. |
+| Backend | **Python + FastAPI**, un solo servicio, en **Render (plan gratis)** | Formulario, panel, webhook y bot en un proceso: un único punto a monitorear. Validación con pydantic. |
+| Base de datos | **Supabase Postgres, plan gratis** (asyncpg) | Persistencia real. RLS activo como segunda barrera. Todo el estado vive aquí: el servidor es desechable. |
+| IA | **Groq (Llama 3.3 70B, plan gratis)** por la API estándar chat/completions | Sin costo. `pasar_a_humano` es una herramienta del modelo, respaldada por una regex que no depende de él. Cambiar de proveedor es cambiar 3 variables (`LLM_*`). |
+| HTTPS | Render lo da gratis (en un VPS: **Caddy**) | Sin certificados que administrar. |
+| Hosting | **Render free** (o Docker en un VPS) | Contenedor sin estado: si se reinicia, no se pierde nada. |
 
 **Descartado a propósito**
 - **Evolution API / Baileys:** simula WhatsApp Web. Requiere sesión persistente, reescanear QR si se cae y Meta puede banear el número. Contradice "cero pérdida de sesión".
@@ -44,7 +44,7 @@ app/
   main.py        rutas: formulario, panel (/admin), webhook de WhatsApp, /health
   models.py      cuestionario validado (límites de tamaño, honeypot)
   prompt.py      cuestionario → prompt del bot
-  bot.py         motor conversacional: pausa, idempotencia, escalación, llamada a Claude
+  bot.py         motor conversacional: pausa, idempotencia, escalación, llamada al LLM
   whatsapp.py    firma de Meta, parseo del webhook, envío con reintentos
   events.py      eventos salientes firmados (opcional)
   db.py          todo el SQL; filtra por cliente_id
@@ -62,7 +62,7 @@ DESPLIEGUE.md    guía paso a paso
 - Webhook de Meta: se rechaza todo lo que no traiga firma HMAC válida. Meta reintenta entregas: `wa_message_id` único evita responder dos veces.
 - Panel con usuario y clave (HTTPS + Basic). El contenido del formulario es público y hostil: el panel lo pinta solo como texto y hay CSP estricta (probado con un payload XSS).
 - RLS activo en las 4 tablas sin políticas y permisos de `anon`/`authenticated` revocados: la clave pública de Supabase no lee nada.
-- Si falla Claude o WhatsApp, el cliente recibe un aviso y la conversación se escala; nunca silencio.
+- Si falla el modelo o WhatsApp, el cliente recibe un aviso y la conversación se escala; nunca silencio.
 - Tope de mensajes por hora y conversación contra abuso (costo de la API).
 
 ## Pruebas
@@ -80,7 +80,9 @@ TEST_DATABASE_URL=postgresql://... pytest           # + flujo completo (BORRA el
 - **Atender a un humano ocurre fuera del bot.** El panel muestra teléfono, resumen y conversación; tú o el negocio contactan al cliente.
 - Pedidos y reservas no se guardan como registros: el bot reúne los datos y escala con un resumen para que una persona confirme.
 - Solo texto: audios e imágenes reciben un aviso.
+- **Planes gratis:** Render duerme el servicio sin tráfico (se mitiga con un ping), Groq limita peticiones y tokens por minuto y día, y Supabase Free no hace respaldos. Detalle en DESPLIEGUE.md.
+- Los modelos gratuitos siguen peor las reglas que uno de pago; por eso los temas sensibles se escalan con una regex y no solo por decisión del modelo.
 - Si el contenedor muere justo mientras procesa un mensaje, ese mensaje queda sin respuesta (el cliente puede reenviar).
 - Un solo worker de uvicorn (locks por conversación en memoria).
 
-Siguiente paso: [DESPLIEGUE.md](DESPLIEGUE.md).
+Siguiente paso: [DESPLIEGUE.md](DESPLIEGUE.md) (ruta $0 con límites explicados).
