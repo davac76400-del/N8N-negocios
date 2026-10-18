@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crea tu bot de WhatsApp</title>
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<main>
+  <h1>Crea el bot de WhatsApp de tu negocio</h1>
+  <p class="sub">Cuéntanos cómo funciona tu negocio. Revisamos tu solicitud y, si la aprobamos, tu bot queda listo para atender a tus clientes.</p>
+
+  <form id="forma" novalidate>
+    <fieldset>
+      <legend>1. Tu negocio</legend>
+      <label for="negocio">Nombre comercial</label>
+      <input id="negocio" required maxlength="120" autocomplete="organization">
+      <label for="sector">Sector o tipo de negocio</label>
+      <input id="sector" list="sectores" required maxlength="120" placeholder="Ej. restaurante">
+      <datalist id="sectores">
+        <option value="Restaurante o comida"><option value="Tienda / comercio electrónico">
+        <option value="Servicios profesionales"><option value="Salud y belleza">
+        <option value="Hospedaje y turismo"><option value="Educación"><option value="Otro">
+      </datalist>
+      <label for="descripcion">Describe tu negocio <span class="ayuda">(opcional)</span></label>
+      <textarea id="descripcion" maxlength="1000"></textarea>
+      <label for="moneda">Moneda de tus precios</label>
+      <select id="moneda"><option>MXN</option><option>USD</option><option>COP</option><option>ARS</option><option>CLP</option><option>PEN</option><option>EUR</option></select>
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Catálogo o menú</legend>
+      <p class="ayuda">Agrega cada producto o servicio. Si no pones precio, el bot dirá que es "a consultar". En variantes escribe tamaños, sabores, etc.</p>
+      <div id="catalogo"></div>
+      <button type="button" id="mas-producto">+ Agregar producto o servicio</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>3. Reglas del negocio</legend>
+      <label for="horarios">Horarios de atención</label>
+      <textarea id="horarios" required maxlength="1000" placeholder="Lunes a sábado de 9:00 a 20:00"></textarea>
+      <label for="cobertura">Zonas de cobertura <span class="ayuda">(opcional)</span></label>
+      <textarea id="cobertura" maxlength="1000"></textarea>
+      <label for="politica_entrega">Políticas de entrega <span class="ayuda">(opcional)</span></label>
+      <textarea id="politica_entrega" maxlength="1000"></textarea>
+      <h2 class="separado">Preguntas frecuentes</h2>
+      <div id="faqs"></div>
+      <button type="button" id="mas-faq">+ Agregar pregunta</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>4. Personalidad del bot</legend>
+      <label for="nombre_bot">Nombre del bot</label>
+      <input id="nombre_bot" maxlength="60" value="Asistente">
+      <label for="tono">Tono de comunicación</label>
+      <select id="tono">
+        <option>Cercano y amable</option><option>Formal y profesional</option>
+        <option>Casual y divertido</option><option>Directo y breve</option>
+      </select>
+      <label for="estilo">Estilo de lenguaje <span class="ayuda">(opcional)</span></label>
+      <input id="estilo" maxlength="300" placeholder="Ej. tutea, usa pocos emojis">
+      <label for="restricciones">Restricciones <span class="ayuda">(opcional: lo que el bot nunca debe hacer o decir)</span></label>
+      <textarea id="restricciones" maxlength="1000"></textarea>
+      <label for="directrices">Directrices de atención al cliente <span class="ayuda">(opcional)</span></label>
+      <textarea id="directrices" maxlength="1000"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>5. Cómo te contactamos</legend>
+      <label for="contacto_nombre">Tu nombre</label>
+      <input id="contacto_nombre" required maxlength="120" autocomplete="name">
+      <label for="contacto_email">Correo</label>
+      <input id="contacto_email" type="email" maxlength="200" autocomplete="email">
+      <label for="contacto_telefono">Teléfono / WhatsApp <span class="ayuda">(correo o teléfono, al menos uno)</span></label>
+      <input id="contacto_telefono" type="tel" maxlength="30" autocomplete="tel">
+      <div class="trampa" aria-hidden="true">
+        <label for="website">No llenar</label>
+        <input id="website" tabindex="-1" autocomplete="off">
+      </div>
+    </fieldset>
+
+    <button class="primario" id="enviar" type="submit">Enviar solicitud</button>
+    <div id="estado" class="estado" role="status" aria-live="polite" hidden></div>
+  </form>
+</main>
+<script src="/static/form.js"></script>
+</body>
+</html>

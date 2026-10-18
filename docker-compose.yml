@@ -1,0 +1,25 @@
+services:
+  app:
+    build: .
+    env_file: .env
+    restart: unless-stopped
+    expose: ["8000"]            # solo visible para Caddy; nunca publicado a internet
+    logging: &logs
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  caddy:                        # HTTPS automático (Let's Encrypt) y renovación sola
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMINIO: ${DOMINIO}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data        # certificados: si se pierde, Caddy los pide de nuevo
+    depends_on:
+      app: { condition: service_healthy }
+    logging: *logs
+
+volumes:
+  caddy_data:
